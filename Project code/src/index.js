@@ -14,7 +14,7 @@ const dbConfig = {
     user: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
   };
-  
+
 const db = pgp(dbConfig);
   
   // test your database
@@ -44,3 +44,11 @@ app.use(
   );
 app.listen(3000);
 console.log('Server is listening on port 3000');
+
+app.get('/', (req, res) =>{
+  res.redirect('/login'); 
+});
+
+app.get('/login', (req, res) => {
+  res.render('pages/login');
+}); 
