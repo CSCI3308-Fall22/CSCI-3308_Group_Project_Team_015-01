@@ -1,5 +1,17 @@
 <%- include ('../partials/header') %>
 <%- include ('../partials/menu') %>
+<style>
+  .login{
+    position: relative;
+    bottom: 45px;
+    left: 126px;
+  }
+  .button1{
+    position: relative;
+    left: 1034px;
+  }
+
+</style>
 
 <main>
   <div class="container">
@@ -16,9 +28,14 @@
             <label for="exampleInputPassword1" class="form-label">Profile Image URL</label>
             <input type="text" id = "img_url" class="form-control" name="img_url" required="true">
           </div>
-          <button type="submit" id="submit_button" name="submit" class="btn btn-primary">Register</button>
+          <div class="button1">
+            <button type="submit" id="submit_button" name="submit" class="btn btn-dark">Register</button>
+          </div>
       </div>    
     </form>
+    <div class="login" >
+      <p>Already a User? <a class="nav-item" href="/login" position> login </a></p>
+    </div>
   </div>
 </main>
 
