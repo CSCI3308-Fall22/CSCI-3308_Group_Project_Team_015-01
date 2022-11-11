@@ -1,6 +1,17 @@
 <%- include ('../partials/header') %>
 <%- include ('../partials/menu') %>
+<style>
+  .login{
+    position: relative;
+    bottom: 45px;
+    left: 0%;
+  }
+  .button1{
+    position: relative;
+    left: 94%;
+  }
 
+</style>
 <main>
   <div class="col"><%- include ('../partials/message') %></div>
   <div class="container">
@@ -16,9 +27,14 @@
           <label for= "password">Password</label>
           <input name = "password" type="password" class="form-control" id="password">
           <br>
-          <button action="/login" method=post type="submit" class="btn btn-primary">Login</button>
+          <div class="button1">
+            <button type="submit" id="submit_button" name="submit" class="btn btn-dark">Login</button>
+          </div>
         </div>
     </form>
+    <div class="login" >
+      <p>New User? <a class="nav-item" href="/register" position> Register </a></p>
+    </div>
   </div>
 </div>
     
