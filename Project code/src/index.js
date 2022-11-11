@@ -36,27 +36,7 @@ app.use(
       resave: false,
     })
   );
-app.get('/', (req, res) => {
-    res.redirect('/register'); //this will call the /anotherRoute route in the API
-});
 
-// Register submission
-app.post('/register', async (req, res) => {
-    //the logic goes here
-    const query = `INSERT INTO users(username, password) values ($1, $2);`;
-    db.any(query, [req.body.username, req.body.password])
-        .then(async function (data){
-            const hash = await bcrypt.hash(req.body.password, 10);
-            res.status(200);
-            res.redirect('/login');
-        })
-        .catch(function (err) {
-            console.log(req.body.username) ;
-            res.status(401);
-            res.redirect('/register');
-        })
-});
-  
 
 app.use(
     bodyParser.urlencoded({
@@ -70,6 +50,28 @@ console.log('Server is listening on port 3000');
 app.get('/login', (req, res) => {
   res.render('pages/login');
 }); 
+
+app.get('/', (req, res) => {
+  res.redirect('/register'); //this will call the /anotherRoute route in the API
+});
+
+// Register submission
+app.post('/register', async (req, res) => {
+  //the logic goes here
+  console.log(req.body.password);
+  const hash = await bcrypt.hash(req.body.password, 10);
+  const query = `INSERT INTO users(username, password, img_url) values ($1, $2, $3);`;
+  db.any(query, [req.body.username, hash, req.body.img_url])
+      .then(function (data){
+          res.status(200);
+          res.redirect('/login');
+      })
+      .catch(function (err) {
+          console.log(req.body.username) ;
+          res.status(401);
+          res.redirect('/register');
+      })
+});
 
 app.post('/login', async (req, res) => {
   const query = 'select * from users where users.username = $1'
@@ -85,7 +87,8 @@ app.post('/login', async (req, res) => {
         };
         req.session.save();
         console.log('Logged in successfully')
-        return res.redirect('/discover');
+        res.redirect('/jokes');
+        return;
       }
       else{
           console.log('Username or password is incorrect')
@@ -98,4 +101,15 @@ app.post('/login', async (req, res) => {
 });
 app.get('/register', (req, res) => {
     res.render('pages/register');
+});
+
+app.get('/jokes', (req, res) => {
+  res.render('pages/Jokegenerate');
+});
+app.get('/profile', (req, res) => {
+  res.render('pages/profile');
+});
+app.get("/logout", (req, res) => {
+  req.session.destroy();
+  res.render("pages/login", {message: "Logged out successfully"});
 });
