@@ -52,7 +52,7 @@ app.get('/login', (req, res) => {
 }); 
 
 app.get('/', (req, res) => {
-  res.redirect('/register'); //this will call the /anotherRoute route in the API
+  res.redirect('/login'); //this will call the /anotherRoute route in the API
 });
 
 // Register submission
@@ -91,7 +91,7 @@ app.post('/login', async (req, res) => {
         return;
       }
       else{
-          console.log('Username or password is incorrect')
+        res.render("pages/login", {error: true, message: "Username or password incorrect"});
       }
   })
   .catch((err) => {
@@ -102,7 +102,14 @@ app.post('/login', async (req, res) => {
 app.get('/register', (req, res) => {
     res.render('pages/register');
 });
-
+const auth = (req, res, next) => {
+  if (!req.session.user) {
+    // Default to register page.
+    return res.redirect('/login');
+  }
+  next();
+};
+app.use(auth);
 app.get('/jokes', (req, res) => {
   res.render('pages/Jokegenerate');
 });
