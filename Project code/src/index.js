@@ -1,28 +1,3 @@
-<<<<<<< HEAD
-app.get('/', (req, res) => {
-    res.redirect('/register'); //this will call the /anotherRoute route in the API
-});
-
-// Register submission
-app.post('/register', async (req, res) => {
-    //the logic goes here
-    const query = `INSERT INTO users(username, password) values ($1, $2);`;
-    db.any(query, [req.body.username, req.body.password])
-        .then(async function (data){
-            const hash = await bcrypt.hash(req.body.password, 10);
-            res.status(200);
-            res.redirect('/login');
-        })
-        .catch(function (err) {
-            console.log(req.body.username) ;
-            res.status(401);
-            res.redirect('/register');
-        })
-});
-
-app.get('/register', (req, res) => {
-    res.render('pages/register');
-=======
 const express = require('express');
 const app = express();
 const pgp = require('pg-promise')();
@@ -61,7 +36,28 @@ app.use(
       resave: false,
     })
   );
+app.get('/', (req, res) => {
+    res.redirect('/register'); //this will call the /anotherRoute route in the API
+});
+
+// Register submission
+app.post('/register', async (req, res) => {
+    //the logic goes here
+    const query = `INSERT INTO users(username, password) values ($1, $2);`;
+    db.any(query, [req.body.username, req.body.password])
+        .then(async function (data){
+            const hash = await bcrypt.hash(req.body.password, 10);
+            res.status(200);
+            res.redirect('/login');
+        })
+        .catch(function (err) {
+            console.log(req.body.username) ;
+            res.status(401);
+            res.redirect('/register');
+        })
+});
   
+
 app.use(
     bodyParser.urlencoded({
       extended: true,
@@ -70,9 +66,6 @@ app.use(
 app.listen(3000);
 console.log('Server is listening on port 3000');
 
-app.get('/', (req, res) =>{
-  res.redirect('/login'); 
-});
 
 app.get('/login', (req, res) => {
   res.render('pages/login');
@@ -102,5 +95,7 @@ app.post('/login', async (req, res) => {
     res.redirect('/register')
     console.log('Login failed')
   });
->>>>>>> 75f0120c13bca7330704da17eebab7dbfd321e9c
+});
+app.get('/register', (req, res) => {
+    res.render('pages/register');
 });
