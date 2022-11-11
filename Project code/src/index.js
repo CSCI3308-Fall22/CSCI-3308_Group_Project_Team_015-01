@@ -102,7 +102,14 @@ app.post('/login', async (req, res) => {
 app.get('/register', (req, res) => {
     res.render('pages/register');
 });
-
+const auth = (req, res, next) => {
+  if (!req.session.user) {
+    // Default to register page.
+    return res.redirect('/register');
+  }
+  next();
+};
+app.use(auth);
 app.get('/jokes', (req, res) => {
   res.render('pages/Jokegenerate');
 });
