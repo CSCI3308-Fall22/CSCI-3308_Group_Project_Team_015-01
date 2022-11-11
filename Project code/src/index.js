@@ -52,3 +52,29 @@ app.get('/', (req, res) =>{
 app.get('/login', (req, res) => {
   res.render('pages/login');
 }); 
+
+app.post('/login', async (req, res) => {
+  const query = 'select * from users where users.username = $1'
+
+  db.any(query, [
+    req.body.username,
+  ])
+  .then(async(user) => {
+      const match = await bcrypt.compare(req.body.password, user[0]?.password || ""); //await is explained in #8
+      if(match){
+        req.session.user = {
+          api_key : process.env.API_KEY,
+        };
+        req.session.save();
+        console.log('Logged in successfully')
+        return res.redirect('/discover');
+      }
+      else{
+          console.log('Username or password is incorrect')
+      }
+  })
+  .catch((err) => {
+    res.redirect('/register')
+    console.log('Login failed')
+  });
+});
