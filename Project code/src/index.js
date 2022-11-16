@@ -75,23 +75,29 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
   const query = 'select * from users where users.username = $1'
-
   db.any(query, [
     req.body.username,
   ])
   .then(async(user) => {
       const match = await bcrypt.compare(req.body.password, user[0]?.password || ""); //await is explained in #8
       if(match){
-        req.session.user = {
-          api_key : process.env.API_KEY,
-        };
-        req.session.save();
-        console.log('Logged in successfully')
-        res.redirect('/jokes');
-        return;
+        console.log('Logged in successfully');
+        db.one(query, [req.body.username])
+        .then((data) => {
+            req.session.user = {
+              api_key : process.env.API_KEY,
+            };
+          console.log(data.img_url);
+          req.session.user.img_url = data.img_url;
+          req.session.user.username = data.username;
+          req.session.user.password = data.password;
+          req.session.save();
+          res.redirect('/jokes');
+        });
       }
       else{
         res.render("pages/login", {error: true, message: "Username or password incorrect"});
+        return;
       }
   })
   .catch((err) => {
@@ -111,10 +117,10 @@ const auth = (req, res, next) => {
 };
 app.use(auth);
 app.get('/jokes', (req, res) => {
-  res.render('pages/Jokegenerate');
+  res.render('pages/Jokegenerate', {img: req.session.user.img_url, username: req.session.user.username});
 });
 app.get('/profile', (req, res) => {
-  res.render('pages/profile');
+  res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username});
 });
 app.get("/logout", (req, res) => {
   req.session.destroy();
