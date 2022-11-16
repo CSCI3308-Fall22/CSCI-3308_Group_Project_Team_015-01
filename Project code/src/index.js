@@ -119,6 +119,9 @@ app.use(auth);
 app.get('/jokes', (req, res) => {
   res.render('pages/Jokegenerate', {img: req.session.user.img_url, username: req.session.user.username});
 });
+app.get('/displayjokes', (req, res) => {
+  res.render('pages/displayjokes', {img: req.session.user.img_url, username: req.session.user.username});
+});
 app.get('/profile', (req, res) => {
   res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username});
 });
