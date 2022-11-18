@@ -1,46 +1,35 @@
-<%- include ('../partials/header') %> <%- include ('../partials/menu2') %>
+<%- include ('../partials/header') %>
+<%- include ('../partials/menu2') %>
 
-<style>
-    .filters{
-    position: relative;
-    text-align: center;
-    top: 550px;
-}
-.Button_for_generate{
-    position: relative;
-    text-align: center;
-    right: 350px;
-    top: 200px;
-}
-.Generate_Joke_box{
-    position: relative;
-    background-color: #0d6efd;
-    left: 700px;
-    top: 290px;
-    width: 20%;
-    border-width:10%;
-    border-style:solid;
-    border-color:#0d6efd;
-    border-radius: 5px;
-}
-</style>
-<div class="Generate_Joke_box">
-    <h2>Generate Joke</h2>
-</div>
-<form>
-    <div class="filters">
-        <select class="btn btn-primary" name="filters" id="filters" required>
-            <option selected disabled value="" required>filters</option>
-            <option value="filter1">filter 1</option>
-            <option value="filter2">filter 2</option>
-            <option value="filter3">filter 3</option>
-            <option value="filter4">filter 4</option>
-            <option value="filter5">filter 5</option>
-        </select>
+<main>
+  <div class="col"><%- include ('../partials/message') %></div>
+  <div class="container">
+    <!-- THE REST OF YOUR HTML CODE GOES HERE -->
+
+    <form style="margin-top:5%;" action="/displayjokes" method="POST">
+
+    <div class="mb-3">
+      <label for="joke-filter" class="form-label">Joke Filter</label>
+      <select id="joke-filter" class="form-select" required>
+        <option value="anything" default>Anything</option>
+        <option value="dadJokes">Dad Jokes</option>
+        <option value="yoMama">Yo Mama</option>
+        <option value="french">French Jokes</option>
+      </select>
     </div>
-    <div class="Button_for_generate">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"> <p>Generate Joke</p></button>
+    
+    <div class="mb-3">
+        <label for="quantity" class="form-label">Number of Jokes</label>
+        <input type="number" class="form-control" id="quantity" name="quantity" value = 1 min="1" max="40" required>
     </div>
-</form>
+
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"> Generate Joke </button>
+    </div>
+    </form>
+
+
+  </div>
+</main>
 
 <%- include ('../partials/footer') %>
