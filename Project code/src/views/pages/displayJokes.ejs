@@ -1,12 +1,38 @@
 <%- include ('../partials/header') %>
 <%- include ('../partials/menu2') %>
-
+<body style="background-image: url('https://i.imgur.com/O4QIwDD.jpg'); background-size: cover; background-repeat: no-repeat;
+background-attachment: fixed;">
 <main>
   <div class="col"><%- include ('../partials/message') %></div>
   <div class="container">
     <!-- THE REST OF YOUR HTML CODE GOES HERE -->
-    <h2>Laugh!</h2>
+    <!-- <h2>Laugh!</h2> -->
+    <table class="table table-striped table-dark" style="width: 100%; margin-top: 3%;">
+      <tr>
+        <th>Category</th>
+        <th>Joke</th> 
+        <th></th>
+      </tr>
+      <tbody>
+        <%
+        var joke_entry = "";
+        for (let i = 0; i < 25; i++) {
+          joke_entry +=`
+            <tr>
+              <td>Dad Jokes</td>
+              <td>Dad hahahahahaahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah aha ha ah ah aha ha ha a aha ha ah ah aha </td>
+              <td><button type="submit" style="background-color:rgb(184, 74, 184); border-color: rgb(184, 74, 184); color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Save</button></td>
+            </tr>
+            `
+        }
+        
+       
+        %>
+        <%- joke_entry %>
+      </tbody>
+    </table>
   </div>
 </main>
+</body>
 
 <%- include ('../partials/footer') %>
