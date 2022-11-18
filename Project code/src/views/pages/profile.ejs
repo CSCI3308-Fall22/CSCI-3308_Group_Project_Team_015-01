@@ -6,10 +6,11 @@
 
     <div class="container">
         
-        <h3>Current Username:</h3>
-        <p><%- user.username %></p>
+        <br>
+        <h2><b>Current Username:</b></h2>
+        <h4><%= username %></h4>
 
-        <button type="submit" name="button_username" class="btn btn-block"><b>Change Username</b></button>
+        <button type="submit" name="button_username" class="btn btn-dark"><b>Change Username</b></button>
 
     </div>
 
@@ -45,10 +46,13 @@
     <hr>
 
     <div class="container">
-        
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg" alt="avatar" width="250" height="250">
 
-        <button type="submit" name="button_avatar" class="btn btn-block"><b>Change Avatar</b></button>
+        <h2><b>Current Avatar:</b></h2>
+        <br>
+        <img src=<%= img %> alt="avatar" width="200" height="200">
+        <br>
+
+        <button type="submit" name="button_avatar" class="btn btn-dark"><b>Change Avatar</b></button>
 
     </div>
 
@@ -85,7 +89,7 @@
     
     <div class="container">
 
-        <button type="submit" name="button_username" class="btn btn-block"><b>Change Password</b></button>
+        <button type="submit" name="button_username" class="btn btn-dark"><b>Change Password</b></button>
 
     </div>
 
