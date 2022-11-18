@@ -6,29 +6,120 @@
 
     <div class="container">
         
-        <h3>Current Username:</h3>
-        <p>Test</p>
+        <br>
+        <h2><b>Current Username:</b></h2>
+        <h4><%= username %></h4>
 
-        <button type="submit" name="button_username" class="btn btn-block">Change Username</button>
+        <button type="submit" name="button_username" class="btn btn-dark"><b>Change Username</b></button>
 
+    </div>
+
+    <div class="container">
+        <div class="modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Update Username</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label class="form-label" for="inputUsername">New Username</label>
+                                <input class="form-control" type="text" id="username" required>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="update_username_button">Update</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 
     <hr>
 
     <div class="container">
-        
-        <img src="img_link" alt="avatar" width="100" height="100">
 
-        <button type="submit" name="button_avatar" class="btn btn-block">Change Avatar</button>
+        <h2><b>Current Avatar:</b></h2>
+        <br>
+        <img src=<%= img %> alt="avatar" width="200" height="200">
+        <br>
 
+        <button type="submit" name="button_avatar" class="btn btn-dark"><b>Change Avatar</b></button>
+
+    </div>
+
+    <div class="container">
+        <div class="modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Update Avatar</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label class="form-label" for="inputURL">New Image URL</label>
+                                <input class="form-control" type="text" id="img_url" required>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="update_url_button">Update</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 
     <hr>
     
     <div class="container">
 
-        <button type="submit" name="button_username" class="btn btn-block">Change Password</button>
+        <button type="submit" name="button_username" class="btn btn-dark"><b>Change Password</b></button>
 
+    </div>
+
+    <div class="container">
+        <div class="modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Update Password</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label class="form-label" for="inputPassword">New Password</label>
+                                <input class="form-control" type="text" id="password" required>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="update_password_button">Update</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 
