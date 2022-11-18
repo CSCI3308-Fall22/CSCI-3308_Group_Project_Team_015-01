@@ -122,6 +122,42 @@ app.get('/jokes', (req, res) => {
 app.get('/profile', (req, res) => {
   res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username});
 });
+
+app.get('/button', (req, res) => {
+  res.render('pages/button');
+});
+app.get('/discover', async (req, res) => {
+  console.log("HERE");
+  // axios
+    // .get("https://icanhazdadjoke.com")
+    // .then(data => console.log(data.data))
+    // .catch(error => console.log(error));
+  // const response = await fetch("https://icanhazdadjoke.com");
+  // console.log(response);
+  axios({
+      url: `https://icanhazdadjoke.com/search`,
+          method: 'GET',
+          dataType:'json',
+          headers: {
+            'User-Agent': ' My Library (http:top-shelf.net)',
+            'Accept':'application/json'
+          },
+          params: {
+            'limit': 2
+          }
+      })
+      .then(results => {
+          console.log("HERE2");
+          console.log(results.data); // the results will be displayed on the terminal if the docker containers are running
+       // Send some parameters
+          res.render('pages/discover',{results, error: false});
+      })
+      .catch(results => {
+      // Handle errors
+          results = [];
+          res.render('pages/discover',{results, error: true, message: "No jokes found."});
+      });
+});
 app.get("/logout", (req, res) => {
   req.session.destroy();
   res.render("pages/login", {message: "Logged out successfully"});
