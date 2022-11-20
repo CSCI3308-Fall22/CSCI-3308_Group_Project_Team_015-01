@@ -4,40 +4,38 @@
   .login{
     position: relative;
     bottom: 45px;
-    left: 9.5%;
+    left: 0%;
   }
   .button1{
     position: relative;
-    left: 92.5%;
+    left: 93.5%;
   }
-
 </style>
-
 <main>
+  <div class="col"><%- include ('../partials/message') %></div>
   <div class="container">
-    <form method="POST" action="/register">
-          <legend>
-            <strong>Register</strong>
-          </legend>
-          <div class="mb-3">
-            <label for="exampleInputUsername1" class="form-label">Username</label>
-            <input type="username" id = "username" class="form-control" name="username" required="true">
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Password</label>
-            <input type="password" id = "password" class="form-control" name="password" required="true">
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Profile Image URL</label>
-            <input type="text" id = "img_url" class="form-control" name="img_url" required="true">
-          </div>
-          <div class="button1">
-            <button type="submit" id="submit_button" name="submit" class="btn btn-dark">Register</button>
-          </div>
-      </div>    
+    <form action="/register" method="POST">
+      <legend>
+        <strong>Register</strong>
+      </legend>
+      <div class="mb-3">
+          <label for="exampleInputUsername1" class="form-label">Username</label>
+          <input type="username" id = "username" class="form-control" name="username" required="true">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Password</label>
+          <input type="password" id = "password" class="form-control" name="password" required="true">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Profile Image URL</label>
+          <input type="text" id = "img_url" class="form-control" name="img_url" required="true">
+        </div>
+        <div class="button1">
+          <button type="submit" id="submit_button" name="submit" class="btn btn-dark">Register</button>
+        </div>  
     </form>
     <div class="login" >
-      <p>Already a User? <a class="nav-item" href="/login" position> Login </a></p>
+      <p>New User? <a class="mb-3" href="/login" position> Login </a></p>
     </div>
   </div>
 </main>

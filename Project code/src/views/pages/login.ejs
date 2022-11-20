@@ -8,32 +8,30 @@
   }
   .button1{
     position: relative;
-    left: 94%;
+    left: 94.8%;
   }
-
 </style>
 <main>
   <div class="col"><%- include ('../partials/message') %></div>
   <div class="container">
-    <!-- THE REST OF YOUR HTML CODE GOES HERE -->
     <form action="/login" method="post">
       <legend>
         <strong>Login</strong>
       </legend>
-        <div class="form-element-wrapper">
-          <label for= "username">Username</label>
-          <input name= "username" type="username" class="form-control" id="username">
-          <br>
-          <label for= "password">Password</label>
-          <input name = "password" type="password" class="form-control" id="password">
-          <br>
-          <div class="button1">
-            <button type="submit" id="submit_button" name="submit" class="btn btn-dark">Login</button>
-          </div>
+      <div class="form-element-wrapper">
+        <label for= "username">Username</label>
+        <input name= "username" type="username" class="form-control" id="username">
+        <br>
+        <label for= "password">Password</label>
+        <input name = "password" type="password" class="form-control" id="password">
+        <br>
+        <div class="button1">
+          <button type="submit" id="submit_button" name="submit" class="btn btn-dark">Login</button>
         </div>
+      </div>
     </form>
     <div class="login" >
-      <p>New User? <a class="nav-item" href="/register" position> Register </a></p>
+      <p>New User? <a class="form-element-wrapper" href="/register" position> Register </a></p>
     </div>
   </div>
 </div>
