@@ -67,9 +67,9 @@ app.post('/register', async (req, res) => {
           res.redirect('/login');
       })
       .catch(function (err) {
-          console.log(req.body.username) ;
-          res.status(401);
-          res.redirect('/register');
+          res.render("pages/register.ejs", {message: `Username were Used by Another User Try different one` });
+          // console.log(req.body.username) ;
+          // res.status(401);
       })
 });
 
