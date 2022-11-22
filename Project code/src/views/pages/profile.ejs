@@ -1,116 +1,103 @@
 <%- include ('../partials/header') %>
 <%- include ('../partials/menu2') %>
 
+<style>
+    .buttons{
+        position: relative;
+        text-align: right;
+        bottom: 5px;
+        right: 5px;
+    }
+</style>
 <main>
     <div class="col"><%- include ('../partials/message') %></div>
-
     <div class="container">
         <br>
         <h2><b>Current Username:</b></h2>
         <h4><%= username %></h4>
-        <button type="submit" name="button_username" class="btn btn-dark"><b>Change Username</b></button>
-        <div class="modal">
-            <div class="modal-dialog">
+        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Changeusername">
+            Change Username
+        </button>
+        <div class="modal fade" id="Changeusername" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
                 <div class="modal-content">
-
                     <div class="modal-header">
-                        <h5 class="modal-title">Update Username</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title" id="exampleModalLabel">Change Username</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                     </div>
-
-                    <div class="modal-body">
-                        <form>
-                            <div class="mb-3">
-                                <label class="form-label" for="inputUsername">New Username</label>
-                                <input class="form-control" type="text" id="username" required>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" id="update_username_button">Update</button>
-                    </div>
-
+                    <form id="" action ="" method="POST" >
+                        <label for="recipient-name" class="col-form-label">Current Username :</label>
+                        <p><%= username %></p>
+                        <label for="recipient-name" class="col-form-label">New Username</label>
+                        <input type="text" class="form-control" id="recipient-name">
+                        <hr>
+                        <div class="buttons">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
+        <br>
         <hr>
         <h2><b>Current Avatar:</b></h2>
         <br>
         <img src=<%= img %> alt="avatar" width="200" height="200">
         <br>
-        <button type="submit" name="button_avatar" class="btn btn-dark"><b>Change Avatar</b></button>
-        <div class="container">
-            <div class="modal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-    
-                        <div class="modal-header">
-                            <h5 class="modal-title">Update Avatar</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-    
-                        <div class="modal-body">
-                            <form>
-                                <div class="mb-3">
-                                    <label class="form-label" for="inputURL">New Image URL</label>
-                                    <input class="form-control" type="text" id="img_url" required>
-                                </div>
-                            </form>
-                        </div>
-    
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" id="update_url_button">Update</button>
-                        </div>
-    
+        <br>
+        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#ChangeAvatar">
+            Change Avatar
+        </button>
+        <div class="modal fade" id="ChangeAvatar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Change Image</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                     </div>
+                    <form id="" action ="" method="POST" >
+                        <label for="recipient-name" class="col-form-label">New Image Url</label>
+                        <input type="text" id = "img_url" class="form-control" name="img_url" required autofocus="" oninvalid="this.setCustomValidity('be sure it ends with any picture extention like png')" onchange="try{setCustomValidity('')}catch(e){}" oninput="setCustomValidity(' ')" pattern="(https?:\/\/.*\.(?:png|jpg|jpeg|gif|png|svg))">
+                        <hr>
+                        <div class="buttons">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
         <hr>
-        <button type="submit" name="button_username" class="btn btn-dark"><b>Change Password</b></button>
-        <div class="container">
-            <div class="modal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-    
-                        <div class="modal-header">
-                            <h5 class="modal-title">Update Password</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-    
-                        <div class="modal-body">
-                            <form>
-                                <div class="mb-3">
-                                    <label class="form-label" for="inputPassword">New Password</label>
-                                    <input class="form-control" type="text" id="password" required>
-                                </div>
-                            </form>
-                        </div>
-    
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" id="update_password_button">Update</button>
-                        </div>
-    
+        <h2><b>Password :</b></h2>
+        <br>
+        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#ChangePassword">Change Password</button>
+        <div class="modal fade" id="ChangePassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Change Password</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                     </div>
+                    <form id="" action ="" method="POST" >
+                        <label for="recipient-name" class="col-form-label">Password</label>
+                        <input type="password" id ="password" class="form-control" name="password" required autofocus="" oninvalid="this.setCustomValidity('at least 8 digits including one number, lowercase and uppercase letter, and a symbol')" onchange="try{setCustomValidity('')}catch(e){}" oninput="setCustomValidity(' ')" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{7,16}$" >
+                        <hr>
+                        <div class="buttons">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-    
-
-    
-    
-    <div class="container">
-
-        
-
-    </div>
-
-    
 </main>
 
 <%- include ('../partials/footer') %>
