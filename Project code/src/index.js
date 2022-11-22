@@ -74,7 +74,7 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-  const query = 'select * from users where users.username = $1'
+  const query = 'select * from users where users.username = $1;'
   db.any(query, [
     req.body.username,
   ])
@@ -130,4 +130,48 @@ app.get('/profile', (req, res) => {
 app.get("/logout", (req, res) => {
   req.session.destroy();
   res.render("pages/login", {message: "Logged out successfully"});
+});
+
+app.post('/profilecu', (req, res) => {
+  var newUsername = req.body.newUsername;
+  var oldUsername = req.session.user.username;
+  const query = 'UPDATE users SET username = $1 WHERE username = $2;';
+  db.any(query, [
+    newUsername,
+    oldUsername,
+  ])
+  .then(function (data){
+    console.log('Username Edit Successful');
+    req.session.user.username = newUsername;
+    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Username Edit Successful'});
+  })
+  .catch(function (err){
+    console.log("Username Edit Unsuccessful");
+    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Username Edit Unsuccessful'});
+  });
+});
+
+app.post('/profileca', (req, res) => {
+  var newURL = req.body.newURL;
+  var oldURL = req.session.user.img_url;
+  const query = 'UPDATE users SET img_url = $1 WHERE img_url = $2;';
+  db.any(query, [
+    newURL,
+    oldURL,
+  ])
+  .then(function (data){
+    console.log('Avatar Edit Successful');
+    req.session.user.img_url = newURL;
+    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Avatar Edit Successful'});
+  })
+  .catch(function (err){
+    console.log("Avatar Edit Unsuccessful");
+    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Avatar Edit Unsuccessful'});
+  });
+});
+
+app.post('/profilecp', (req, res) => {
+  console.log('Called API CP');
+
+  res.redirect('/profile');
 });
