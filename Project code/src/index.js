@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
 const axios = require('axios');
+const { Template } = require('ejs');
 
 // database configuration
 const dbConfig = {
@@ -46,6 +47,9 @@ app.use(
 app.listen(3000);
 console.log('Server is listening on port 3000');
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
 
 app.get('/login', (req, res) => {
   res.render('pages/login');
@@ -60,21 +64,27 @@ app.post('/register', async (req, res) => {
   //the logic goes here
   console.log(req.body.password);
   const hash = await bcrypt.hash(req.body.password, 10);
+  const fonud = `select from users where username = $1;`;
+  const user = await db.any(fonud, req.body.username);
+  if (user.length != 0)
+  {
+    res.render("pages/register.ejs", {error: true,
+      message: "Username were Used by Another User.",});
+  }
   const query = `INSERT INTO users(username, password, img_url) values ($1, $2, $3);`;
   db.any(query, [req.body.username, hash, req.body.img_url])
-      .then(function (data){
+      .then(() =>{
           res.status(200);
           res.redirect('/login');
       })
-      .catch(function (err) {
-          res.render("pages/register.ejs", {message: `Username were Used by Another User Try different one` });
-          // console.log(req.body.username) ;
-          // res.status(401);
+      .catch(() => {
+          res.render("pages/register.ejs", {error: true,
+          message: "Error",});
       })
 });
 
 app.post('/login', async (req, res) => {
-  const query = 'select * from users where users.username = $1'
+  const query = 'select * from users where users.username = $1;'
   db.any(query, [
     req.body.username,
   ])
@@ -127,7 +137,175 @@ app.get('/displayjokes', (req, res) => {
 app.get('/profile', (req, res) => {
   res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username});
 });
+
+app.post('/displayjokes', async (req, res) => {
+  console.log(req.body.jokefilter);
+  if(req.body.jokefilter == "dadJokes")
+  {
+    type = "dadjokes";
+    axios({
+      url: `https://icanhazdadjoke.com/search`,
+          method: 'GET',
+          dataType:'json',
+          headers: {
+            'User-Agent': ' My Library (http:top-shelf.net)',
+            'Accept':'application/json'
+          },
+          params: {
+            'limit': req.body.quantity
+          }
+      })
+      .then(results => {
+          console.log(results.data); // the results will be displayed on the terminal if the docker containers are running
+          res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
+          return;
+      })
+      .catch(results => {
+      // Handle errors
+          results = [];
+          res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: true, message: "No jokes found."});
+          return;
+      });
+  } else if(req.body.jokefilter == "yoMama")
+  {
+    type = "yoMama"; 
+    axios({
+      url: `http://yomamma-api.herokuapp.com/jokes`,
+          method: 'GET',
+          dataType:'json',
+          params: {
+            'count': req.body.quantity
+          }
+      })
+      .then(results => {
+          console.log(results.data); // the results will be displayed on the terminal if the docker containers are running
+          res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
+          return;
+      })
+      .catch(results => {
+      // Handle errors
+          results = [];
+          res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: true, message: "No jokes found."});
+          return;
+      });
+
+  } else if(req.body.jokefilter == "french")
+  {
+    type = "french";
+    let results = new Array();
+    i = 0
+    while(i < req.body.quantity)
+    {
+      await axios({
+        url: `https://blague.xyz/api/joke/random`,
+              method: 'GET',
+              dataType:'json',
+          })
+        .then(response => {
+            results.push(response);
+        })
+      i += 1;
+    }
+    console.log(results[0].data);
+    res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
+  } else if(req.body.jokefilter == "geek")
+  {
+    type = "geek";
+    let results = new Array();
+    i = 0
+    while(i < req.body.quantity)
+    {
+      await axios({
+        url: `https://geek-jokes.sameerkumar.website/api?format=json`,
+              method: 'GET',
+              dataType:'json',
+          })
+        .then(response => {
+            results.push(response);
+        })
+      i += 1;
+    }
+    console.log(results[0].data);
+    res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
+  } else if(req.body.jokefilter == "bread")
+  {
+    type = "bread";
+    let results = new Array();
+    i = 0
+    while(i < req.body.quantity)
+    {
+      await axios({
+        url: `https://my-bao-server.herokuapp.com/api/breadpuns`,
+              method: 'GET',
+              dataType:'json',
+          })
+        .then(response => {
+            results.push(response);
+        })
+      i += 1;
+    }
+    console.log(results[0].data);
+    res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
+  }
+});
 app.get("/logout", (req, res) => {
   req.session.destroy();
   res.render("pages/login", {message: "Logged out successfully"});
+});
+
+app.post('/profilecu', (req, res) => {
+  var newUsername = req.body.newUsername;
+  var oldUsername = req.session.user.username;
+  const query = 'UPDATE users SET username = $1 WHERE username = $2;';
+  db.any(query, [
+    newUsername,
+    oldUsername,
+  ])
+  .then(function (data){
+    console.log('Username Edit Successful');
+    req.session.user.username = newUsername;
+    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Username Edit Successful'});
+  })
+  .catch(function (err){
+    console.log("Username Edit Unsuccessful");
+    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Username Edit Unsuccessful'});
+  });
+});
+
+app.post('/profileca', (req, res) => {
+  var newURL = req.body.newURL;
+  var oldURL = req.session.user.img_url;
+  const query = 'UPDATE users SET img_url = $1 WHERE img_url = $2;';
+  db.any(query, [
+    newURL,
+    oldURL,
+  ])
+  .then(function (data){
+    console.log('Avatar Edit Successful');
+    req.session.user.img_url = newURL;
+    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Avatar Edit Successful'});
+  })
+  .catch(function (err){
+    console.log("Avatar Edit Unsuccessful");
+    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Avatar Edit Unsuccessful'});
+  });
+});
+
+app.post('/profilecp', async (req, res) => {
+  const newPassword = await bcrypt.hash(req.body.newPassword, 10);
+  var oldPassword = req.session.user.password;
+  const query = 'UPDATE users SET password = $1 WHERE password = $2;';
+  db.any(query, [
+    newPassword,
+    oldPassword,
+  ])
+  .then(function (data){
+    console.log('Password Edit Successful');
+    req.session.user.password = newPassword;
+    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Password Edit Successful'});
+  })
+  .catch(function (err){
+    console.log("Password Edit Unsuccessful");
+    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Password Edit Unsuccessful'});
+  });
 });
