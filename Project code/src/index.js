@@ -170,8 +170,21 @@ app.post('/profileca', (req, res) => {
   });
 });
 
-app.post('/profilecp', (req, res) => {
-  console.log('Called API CP');
-
-  res.redirect('/profile');
+app.post('/profilecp', async (req, res) => {
+  const newPassword = await bcrypt.hash(req.body.newPassword, 10);
+  var oldPassword = req.session.user.password;
+  const query = 'UPDATE users SET password = $1 WHERE password = $2;';
+  db.any(query, [
+    newPassword,
+    oldPassword,
+  ])
+  .then(function (data){
+    console.log('Password Edit Successful');
+    req.session.user.password = newPassword;
+    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Password Edit Successful'});
+  })
+  .catch(function (err){
+    console.log("Password Edit Unsuccessful");
+    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Password Edit Unsuccessful'});
+  });
 });
