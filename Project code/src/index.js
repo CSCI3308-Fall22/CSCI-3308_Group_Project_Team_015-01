@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
 const axios = require('axios');
+const { Template } = require('ejs');
 
 // database configuration
 const dbConfig = {
@@ -46,6 +47,9 @@ app.use(
 app.listen(3000);
 console.log('Server is listening on port 3000');
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
 
 app.get('/login', (req, res) => {
   res.render('pages/login');
@@ -128,18 +132,12 @@ app.get('/profile', (req, res) => {
   res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username});
 });
 
-app.get('/button', (req, res) => {
-  res.render('pages/button');
-});
-app.get('/discover', async (req, res) => {
-  console.log("HERE");
-  // axios
-    // .get("https://icanhazdadjoke.com")
-    // .then(data => console.log(data.data))
-    // .catch(error => console.log(error));
-  // const response = await fetch("https://icanhazdadjoke.com");
-  // console.log(response);
-  axios({
+app.post('/displayjokes', async (req, res) => {
+  console.log(req.body.jokefilter);
+  if(req.body.jokefilter == "dadJokes")
+  {
+    type = "dadjokes";
+    axios({
       url: `https://icanhazdadjoke.com/search`,
           method: 'GET',
           dataType:'json',
@@ -148,20 +146,101 @@ app.get('/discover', async (req, res) => {
             'Accept':'application/json'
           },
           params: {
-            'limit': 2
+            'limit': req.body.quantity
           }
       })
       .then(results => {
-          console.log("HERE2");
           console.log(results.data); // the results will be displayed on the terminal if the docker containers are running
-       // Send some parameters
-          res.render('pages/discover',{results, error: false});
+          res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
+          return;
       })
       .catch(results => {
       // Handle errors
           results = [];
-          res.render('pages/discover',{results, error: true, message: "No jokes found."});
+          res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: true, message: "No jokes found."});
+          return;
       });
+  } else if(req.body.jokefilter == "yoMama")
+  {
+    type = "yoMama"; 
+    axios({
+      url: `http://yomamma-api.herokuapp.com/jokes`,
+          method: 'GET',
+          dataType:'json',
+          params: {
+            'count': req.body.quantity
+          }
+      })
+      .then(results => {
+          console.log(results.data); // the results will be displayed on the terminal if the docker containers are running
+          res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
+          return;
+      })
+      .catch(results => {
+      // Handle errors
+          results = [];
+          res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: true, message: "No jokes found."});
+          return;
+      });
+
+  } else if(req.body.jokefilter == "french")
+  {
+    type = "french";
+    let results = new Array();
+    i = 0
+    while(i < req.body.quantity)
+    {
+      await axios({
+        url: `https://blague.xyz/api/joke/random`,
+              method: 'GET',
+              dataType:'json',
+          })
+        .then(response => {
+            results.push(response);
+        })
+      i += 1;
+    }
+    console.log(results[0].data);
+    res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
+  } else if(req.body.jokefilter == "geek")
+  {
+    type = "geek";
+    let results = new Array();
+    i = 0
+    while(i < req.body.quantity)
+    {
+      await axios({
+        url: `https://geek-jokes.sameerkumar.website/api?format=json`,
+              method: 'GET',
+              dataType:'json',
+          })
+        .then(response => {
+            results.push(response);
+        })
+      i += 1;
+    }
+    console.log(results[0].data);
+    res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
+  } else if(req.body.jokefilter == "bread")
+  {
+    type = "bread";
+    let results = new Array();
+    i = 0
+    while(i < req.body.quantity)
+    {
+      await axios({
+        url: `https://my-bao-server.herokuapp.com/api/breadpuns`,
+              method: 'GET',
+              dataType:'json',
+          })
+        .then(response => {
+            results.push(response);
+        })
+      i += 1;
+    }
+    console.log(results[0].data);
+    res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
+  }
 });
 app.get("/logout", (req, res) => {
   req.session.destroy();
