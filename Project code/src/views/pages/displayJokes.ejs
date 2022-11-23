@@ -16,14 +16,99 @@ background-attachment: fixed;">
       <tbody>
         <%
         var joke_entry = "";
-        for (let i = 0; i < 25; i++) {
-          joke_entry +=`
-            <tr>
-              <td>Dad Jokes</td>
-              <td>Dad hahahahahaahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah aha ha ah ah aha ha ha a aha ha ah ah aha </td>
-              <td><button type="submit" style="background-color:rgb(184, 74, 184); border-color: rgb(184, 74, 184); color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Save</button></td>
-            </tr>
-            `
+        if(results){
+
+
+          if(type == 'dadjokes'){
+            console.log("Length of array: " + results.data.results.length);
+            for (let i = 0; i < results.data.results.length; i++) {
+              console.log(results.data);
+            
+              joke_entry +=`
+              <tr>
+                <td>Dad Jokes</td>
+                <td>${results.data.results[i].joke}</td>
+                <td><button type="submit" style="background-color:rgb(184, 74, 184); border-color: rgb(184, 74, 184); color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Save</button></td>
+              </tr>
+              `
+            }
+          }
+
+
+          else if(type == 'yoMama'){
+            console.log("Length of array: " + results.data.length);
+            console.log(results.data[0].joke);
+
+            for (let i = 0; i < results.data.length; i++) {
+              joke_entry +=`
+              <tr>
+                <td>Yo Mama</td>
+                <td>${results.data[i].joke}</td>
+                <td><button type="submit" style="background-color:rgb(184, 74, 184); border-color: rgb(184, 74, 184); color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Save</button></td>
+              </tr>
+              `
+            }
+          }
+
+
+          else if(type == 'french'){
+            console.log("Length of array: " + results.length);
+            console.log(results[0].data.joke);
+
+            for (let i = 0; i < results.length; i++) {
+              joke_entry +=`
+              <tr>
+                <td>Français</td>
+                <td>${results[i].data.joke.question}<br>${results[i].data.joke.answer}</td>
+                <td><button type="submit" style="background-color:rgb(184, 74, 184); border-color: rgb(184, 74, 184); color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Save</button></td>
+              </tr>
+              `
+            }
+          }
+
+
+          else if(type == 'geek'){
+            console.log("Length of array: " + results.length);
+            console.log(results[0].data);
+
+            for (let i = 0; i < results.length; i++) {
+              joke_entry +=`
+              <tr>
+                <td>Geek</td>
+                <td>${results[i].data.joke}</td>
+                <td><button type="submit" style="background-color:rgb(184, 74, 184); border-color: rgb(184, 74, 184); color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Save</button></td>
+              </tr>
+              `
+            }
+          }
+
+
+          else if(type == 'read'){
+            console.log("Length of array: " + results.length);
+            console.log(results[0].data);
+
+            for (let i = 0; i < results.length; i++) {
+              joke_entry +=`
+              <tr>
+                <td>Bread</td>
+                <td>${results[i].data}</td>
+                <td><button type="submit" style="background-color:rgb(184, 74, 184); border-color: rgb(184, 74, 184); color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Save</button></td>
+              </tr>
+              `
+            }
+          }
+
+
+
+          else{
+            joke_entry +=`
+              <tr>
+                <td>Error Jokes</td>
+                <td>How did you even get here? ... ... ... LAUGH!</td>
+                <td><button type="submit" style="background-color:rgb(184, 74, 184); border-color: rgb(184, 74, 184); color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Save</button></td>
+              </tr>
+              `
+          }
         }
         
        
