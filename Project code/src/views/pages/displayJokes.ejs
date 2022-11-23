@@ -16,12 +16,14 @@ background-attachment: fixed;">
       <tbody>
         <%
         var joke_entry = "";
+        var jLength = 0;
         if(results){
 
 
           if(type == 'dadjokes'){
-            console.log("Length of array: " + results.data.results.length);
-            for (let i = 0; i < results.data.results.length; i++) {
+            jLength = results.data.results.length;
+            console.log("Length of array: " + jLength);
+            for (let i = 0; i < jLength; i++) {
               console.log(results.data);
             
               joke_entry +=`
@@ -36,10 +38,11 @@ background-attachment: fixed;">
 
 
           else if(type == 'yoMama'){
-            console.log("Length of array: " + results.data.length);
+            jLength =  results.data.length;
+            console.log("Length of array: " + jLength);
             console.log(results.data[0].joke);
 
-            for (let i = 0; i < results.data.length; i++) {
+            for (let i = 0; i < jLength; i++) {
               joke_entry +=`
               <tr>
                 <td>Yo Mama</td>
@@ -52,10 +55,11 @@ background-attachment: fixed;">
 
 
           else if(type == 'french'){
+            jLength =  results.length;
             console.log("Length of array: " + results.length);
             console.log(results[0].data.joke);
 
-            for (let i = 0; i < results.length; i++) {
+            for (let i = 0; i < jLength; i++) {
               joke_entry +=`
               <tr>
                 <td>Français</td>
@@ -68,10 +72,11 @@ background-attachment: fixed;">
 
 
           else if(type == 'geek'){
-            console.log("Length of array: " + results.length);
+            jLength =  results.length;
+            console.log("Length of array: " + jLength);
             console.log(results[0].data);
 
-            for (let i = 0; i < results.length; i++) {
+            for (let i = 0; i < jLength; i++) {
               joke_entry +=`
               <tr>
                 <td>Geek</td>
@@ -84,10 +89,11 @@ background-attachment: fixed;">
 
 
           else if(type == 'bread'){
-            console.log("Length of array: " + results.length);
+            jLength =  results.length;
+            console.log("Length of array: " + jLength);
             console.log(results[0].data);
 
-            for (let i = 0; i < results.length; i++) {
+            for (let i = 0; i < jLength; i++) {
               joke_entry +=`
               <tr>
                 <td>Bread</td>
@@ -117,6 +123,10 @@ background-attachment: fixed;">
       </tbody>
     </table>
   </div>
+    <div style="margin-left: 45%; margin-bottom: 3%;">
+    <a href="/jokes" style="background-color:rgb(245, 238, 252); border-color: rgb(255, 255, 255); color: black; font-size: 20px"class="btn btn-primary" >Back to Generate</a>
+  </div>
+
 </main>
 </body>
 
