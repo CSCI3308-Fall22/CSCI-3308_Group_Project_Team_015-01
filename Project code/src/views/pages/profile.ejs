@@ -39,7 +39,10 @@
                             <p><%= username %></p>
 
                             <label for="newUsername" class="col-form-label"><b>New Username</b></label>
-                            <input type="text" class="form-control" id="newUsername" name="newUsername">
+                            <input type="text" class="form-control" id="newUsername" name="newUsername" required>
+
+                            <label for="currentPasswordU" class="col-form-label"><b>Current Password</b></label>
+                            <input type="password" class="form-control" id="currentPasswordU" name="currentPasswordU" required>
                             <hr>
 
                             <div class="buttons">
@@ -86,6 +89,9 @@
 
                             <label for="newURL" class="col-form-label"><b>New Image Url</b></label>
                             <input type="text" id = "newURL" class="form-control" name="newURL" required autofocus="" oninvalid="this.setCustomValidity('please submit a link with a picture extention such as .png or .jpg')" onchange="try{setCustomValidity('')}catch(e){}" oninput="setCustomValidity(' ')" pattern="(https?:\/\/.*\.(?:png|jpg|jpeg|gif|png|svg))">
+
+                            <label for="currentPasswordA" class="col-form-label"><b>Current Password</b></label>
+                            <input type="password" class="form-control" id="currentPasswordA" name="currentPasswordA" required>
                             <hr>
 
                             <div class="buttons">
@@ -115,8 +121,14 @@
 
                     <div class="modal-body">
                         <form action ="\profilecp" method="POST">
-                            <label for="newPassword" class="col-form-label"><b>New Password</b></label>
-                            <input type="password" id ="newPassword" class="form-control" name="newPassword" required autofocus="" oninvalid="this.setCustomValidity('password must have at least 8 digits, including one number, one lowercase and uppercase letter, and one symbol')" onchange="try{setCustomValidity('')}catch(e){}" oninput="setCustomValidity(' ')" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{7,16}$" >
+                            <label for="newPassword1" class="col-form-label"><b>New Password</b></label>
+                            <input type="password" id ="newPassword1" class="form-control" name="newPassword1" required autofocus="" oninvalid="this.setCustomValidity('password must have at least 8 digits, including one number, one lowercase and uppercase letter, and one symbol')" onchange="try{setCustomValidity('')}catch(e){}" oninput="setCustomValidity(' ')" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{7,16}$" >
+
+                            <label for="newPassword2" class="col-form-label"><b>Confirm New Password</b></label>
+                            <input type="password" id ="newPassword2" class="form-control" name="newPassword2" required autofocus="" oninvalid="this.setCustomValidity('password must have at least 8 digits, including one number, one lowercase and uppercase letter, and one symbol')" onchange="try{setCustomValidity('')}catch(e){}" oninput="setCustomValidity(' ')" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{7,16}$" >
+
+                            <label for="currentPasswordP" class="col-form-label"><b>Current Password</b></label>
+                            <input type="password" class="form-control" id="currentPasswordP" name="currentPasswordP" required>
                             <hr>
 
                             <div class="buttons">
