@@ -16,14 +16,105 @@ background-attachment: fixed;">
       <tbody>
         <%
         var joke_entry = "";
-        for (let i = 0; i < 25; i++) {
-          joke_entry +=`
-            <tr>
-              <td>Dad Jokes</td>
-              <td>Dad hahahahahaahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah aha ha ah ah aha ha ha a aha ha ah ah aha </td>
-              <td><button type="submit" style="background-color:rgb(184, 74, 184); border-color: rgb(184, 74, 184); color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Save</button></td>
-            </tr>
-            `
+        var jLength = 0;
+        if(results){
+
+
+          if(type == 'dadjokes'){
+            jLength = results.data.results.length;
+            console.log("Length of array: " + jLength);
+            for (let i = 0; i < jLength; i++) {
+              console.log(results.data);
+            
+              joke_entry +=`
+              <tr>
+                <td>Dad Jokes</td>
+                <td>${results.data.results[i].joke}</td>
+                <td><button type="submit" style="background-color:rgb(184, 74, 184); border-color: rgb(184, 74, 184); color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Save</button></td>
+              </tr>
+              `
+            }
+          }
+
+
+          else if(type == 'yoMama'){
+            jLength =  results.data.length;
+            console.log("Length of array: " + jLength);
+            console.log(results.data[0].joke);
+
+            for (let i = 0; i < jLength; i++) {
+              joke_entry +=`
+              <tr>
+                <td>Yo Mama</td>
+                <td>${results.data[i].joke}</td>
+                <td><button type="submit" style="background-color:rgb(184, 74, 184); border-color: rgb(184, 74, 184); color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Save</button></td>
+              </tr>
+              `
+            }
+          }
+
+
+          else if(type == 'french'){
+            jLength =  results.length;
+            console.log("Length of array: " + results.length);
+            console.log(results[0].data.joke);
+
+            for (let i = 0; i < jLength; i++) {
+              joke_entry +=`
+              <tr>
+                <td>Français</td>
+                <td>${results[i].data.joke.question}<br>${results[i].data.joke.answer}</td>
+                <td><button type="submit" style="background-color:rgb(184, 74, 184); border-color: rgb(184, 74, 184); color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Save</button></td>
+              </tr>
+              `
+            }
+          }
+
+
+          else if(type == 'geek'){
+            jLength =  results.length;
+            console.log("Length of array: " + jLength);
+            console.log(results[0].data);
+
+            for (let i = 0; i < jLength; i++) {
+              joke_entry +=`
+              <tr>
+                <td>Geek</td>
+                <td>${results[i].data.joke}</td>
+                <td><button type="submit" style="background-color:rgb(184, 74, 184); border-color: rgb(184, 74, 184); color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Save</button></td>
+              </tr>
+              `
+            }
+          }
+
+
+          else if(type == 'bread'){
+            jLength =  results.length;
+            console.log("Length of array: " + jLength);
+            console.log(results[0].data);
+
+            for (let i = 0; i < jLength; i++) {
+              joke_entry +=`
+              <tr>
+                <td>Bread</td>
+                <td>${results[i].data}</td>
+                <td><button type="submit" style="background-color:rgb(184, 74, 184); border-color: rgb(184, 74, 184); color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Save</button></td>
+              </tr>
+              `
+            }
+          }
+
+
+
+          else{
+            joke_entry +=`
+              <tr>
+                <td>Error Jokes</td>
+                <td>How did you even get here? ... ... ... LAUGH!</td>
+                <td><button type="submit" style="background-color:rgb(184, 74, 184); border-color: rgb(184, 74, 184); color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Save</button></td>
+              </tr>
+              `
+          }
         }
         
        
@@ -32,6 +123,10 @@ background-attachment: fixed;">
       </tbody>
     </table>
   </div>
+    <div style="margin-left: 45%; margin-bottom: 3%;">
+    <a href="/jokes" style="background-color:rgb(245, 238, 252); border-color: rgb(255, 255, 255); color: black; font-size: 20px"class="btn btn-primary" >Back to Generate</a>
+  </div>
+
 </main>
 </body>
 

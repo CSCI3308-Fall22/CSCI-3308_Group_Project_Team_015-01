@@ -68,7 +68,7 @@ app.post('/register', async (req, res) => {
   db.any(query, [req.body.username, hash, req.body.img_url])
       .then(function (data){
           res.status(200);
-          res.redirect('/login');
+          res.render("pages/login", {message: "Account Successfully Created!"});
       })
       .catch(function (err) {
           res.render("pages/register.ejs", {message: `Username were Used by Another User Try different one` });
