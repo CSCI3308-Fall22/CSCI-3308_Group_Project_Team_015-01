@@ -61,25 +61,24 @@ app.get('/', (req, res) => {
 
 // Register submission
 app.post('/register', async (req, res) => {
-  //the logic goes here
-  console.log(req.body.password);
-  const hash = await bcrypt.hash(req.body.password, 10);
-  const fonud = `select from users where username = $1;`;
-  const user = await db.any(fonud, req.body.username);
+  //user is found
+  const found = `select * from users where username = $1`;
+  let user = await db.any(found, req.body.username);
   if (user.length != 0)
   {
-    res.render("pages/register.ejs", {error: true,
-      message: "Username were Used by Another User.",});
-  }
+    res.render("pages/register", {error : true, message: "Username Exist Try Another Username !"});
+  } 
+  const hash = await bcrypt.hash(req.body.password, 10);
   const query = `INSERT INTO users(username, password, img_url) values ($1, $2, $3);`;
   db.any(query, [req.body.username, hash, req.body.img_url])
-      .then(() =>{
+      .then(function (data){
           res.status(200);
-          res.redirect('/login');
+          res.render("pages/login", {message: "Account Successfully Created!"});
       })
-      .catch(() => {
-          res.render("pages/register.ejs", {error: true,
-          message: "Error",});
+      .catch(function (err) {
+          res.render("pages/register.ejs", {message: `Username were Used by Another User Try different one` });
+          // console.log(req.body.username) ;
+          // res.status(401);
       })
 });
 
@@ -253,59 +252,101 @@ app.get("/logout", (req, res) => {
   res.render("pages/login", {message: "Logged out successfully"});
 });
 
-app.post('/profilecu', (req, res) => {
-  var newUsername = req.body.newUsername;
-  var oldUsername = req.session.user.username;
-  const query = 'UPDATE users SET username = $1 WHERE username = $2;';
-  db.any(query, [
-    newUsername,
-    oldUsername,
-  ])
-  .then(function (data){
-    console.log('Username Edit Successful');
-    req.session.user.username = newUsername;
-    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Username Edit Successful'});
-  })
-  .catch(function (err){
-    console.log("Username Edit Unsuccessful");
-    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Username Edit Unsuccessful'});
-  });
+
+app.post('/profilecu', async (req, res) => {
+  const found = `select * from users where username = $1`;
+  let user = await db.any(found, req.body.username);
+  if (user.length != 0)
+  {
+    res.render("pages/register", {error : true, message: "Username Exist Try Another Username !"});
+  } 
+  const match = await bcrypt.compare(req.body.currentPasswordU, req.session.user.password);
+  if(match){
+    var newUsername = req.body.newUsername;
+    var oldUsername = req.session.user.username;
+    const query = 'UPDATE users SET username = $1 WHERE username = $2;';
+    db.any(query, [
+      newUsername,
+      oldUsername,
+    ])
+    .then(function (data){
+      console.log('Username Edit Successful');
+      req.session.user.username = newUsername;
+      res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Username Edit Successful'});
+    })
+    .catch(function (err){
+      console.log("Username Edit Unsuccessful");
+      res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Username Edit Unsuccessful'});
+    });
+
+  }else{
+    console.log("Incorrect Password");
+    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Incorrect Password'});
+  }
 });
 
-app.post('/profileca', (req, res) => {
-  var newURL = req.body.newURL;
-  var oldURL = req.session.user.img_url;
-  const query = 'UPDATE users SET img_url = $1 WHERE img_url = $2;';
-  db.any(query, [
-    newURL,
-    oldURL,
-  ])
-  .then(function (data){
-    console.log('Avatar Edit Successful');
-    req.session.user.img_url = newURL;
-    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Avatar Edit Successful'});
-  })
-  .catch(function (err){
-    console.log("Avatar Edit Unsuccessful");
-    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Avatar Edit Unsuccessful'});
-  });
+
+app.post('/profileca', async (req, res) => {
+
+  const match = await bcrypt.compare(req.body.currentPasswordA, req.session.user.password);
+  if(match){
+
+    var newURL = req.body.newURL;
+    var oldURL = req.session.user.img_url;
+    const query = 'UPDATE users SET img_url = $1 WHERE img_url = $2;';
+
+    db.any(query, [
+      newURL,
+      oldURL,
+    ])
+    .then(function (data){
+      console.log('Avatar Edit Successful');
+      req.session.user.img_url = newURL;
+      res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Avatar Edit Successful'});
+    })
+    .catch(function (err){
+      console.log("Avatar Edit Unsuccessful");
+      res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Avatar Edit Unsuccessful'});
+    });
+
+  }else{
+    console.log("Incorrect Password");
+    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Incorrect Password'});
+  }
 });
+
 
 app.post('/profilecp', async (req, res) => {
-  const newPassword = await bcrypt.hash(req.body.newPassword, 10);
+
   var oldPassword = req.session.user.password;
-  const query = 'UPDATE users SET password = $1 WHERE password = $2;';
-  db.any(query, [
-    newPassword,
-    oldPassword,
-  ])
-  .then(function (data){
-    console.log('Password Edit Successful');
-    req.session.user.password = newPassword;
-    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Password Edit Successful'});
-  })
-  .catch(function (err){
-    console.log("Password Edit Unsuccessful");
-    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Password Edit Unsuccessful'});
-  });
+  const match = await bcrypt.compare(req.body.currentPasswordP, oldPassword);
+  if(match){
+    if(req.body.newPassword1 === req.body.newPassword2){
+
+      const newPassword = await bcrypt.hash(req.body.newPassword1, 10);
+      const query = 'UPDATE users SET password = $1 WHERE password = $2;';
+
+      db.any(query, [
+        newPassword,
+        oldPassword,
+      ])
+      .then(function (data){
+        console.log('Password Edit Successful');
+        req.session.user.password = newPassword;
+        res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Password Edit Successful'});
+      })
+      .catch(function (err){
+        console.log("Password Edit Unsuccessful");
+        res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Password Edit Unsuccessful'});
+      });
+
+    }else{
+      console.log("New Password Fields Did Not Match");
+      res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'New Password Fields Did Not Match'});
+    }
+
+  }else{
+    console.log("Incorrect Current Password");
+    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Incorrect Current Password'});
+  }
 });
