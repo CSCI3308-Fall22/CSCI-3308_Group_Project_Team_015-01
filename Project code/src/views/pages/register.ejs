@@ -36,7 +36,7 @@
         </div>
         <div class="mb-3">
           <label for="exampleInputPassword1" class="form-label">Profile Image URL</label>
-          <input type="text" id = "img_url" class="form-control" name="img_url" required autofocus="" oninvalid="this.setCustomValidity('be sure it ends with any picture extention like png')" onchange="try{setCustomValidity('')}catch(e){}" oninput="setCustomValidity(' ')" pattern="(https?:\/\/.*\.(?:png|jpg|jpeg|gif|png|svg))">
+          <input type="text" id = "img_url" class="form-control" name="img_url" required autofocus="" oninvalid="this.setCustomValidity('Make sure the link starts with https and ends with image extention For example : http:\\-.png')" onchange="try{setCustomValidity('')}catch(e){}" oninput="setCustomValidity(' ')" pattern="(https?:\/\/.*\.(?:png|jpg|jpeg|gif|png|svg))">
         </div>
         <div class="button1">
           <button type="submit" id="submit_button" name="submit" class="btn btn-dark">Register</button>
