@@ -64,13 +64,13 @@ app.post('/register', async (req, res) => {
   //the logic goes here
   console.log(req.body.password);
   const hash = await bcrypt.hash(req.body.password, 10);
-  const fonud = `select from users where username = $1;`;
-  const user = await db.any(fonud, req.body.username);
-  if (user.length != 0)
-  {
-    res.render("pages/register.ejs", {error: true,
-      message: "Username were Used by Another User.",});
-  }
+  // const fonud = `select from users where username = $1;`;
+  // const user = await db.any(fonud, req.body.username);
+  // if (user.length != 0)
+  // {
+  //   res.render("pages/register.ejs", {error: true,
+  //     message: "Username were Used by Another User.",});
+  // }
   const query = `INSERT INTO users(username, password, img_url) values ($1, $2, $3);`;
   db.any(query, [req.body.username, hash, req.body.img_url])
       .then(() =>{
@@ -84,7 +84,7 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-  const query = 'select * from users where users.username = $1;'
+  const query = 'select * from users where username = $1;'
   db.any(query, [
     req.body.username,
   ])
