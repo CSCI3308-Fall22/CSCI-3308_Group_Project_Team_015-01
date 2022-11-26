@@ -47,10 +47,6 @@ app.use(
 app.listen(3000);
 console.log('Server is listening on port 3000');
 
-function getRandomInt(max) {
-  return Math.floor(Math.random() * max);
-}
-
 app.get('/login', (req, res) => {
   res.render('pages/login');
 }); 
@@ -146,11 +142,12 @@ app.post('/displayjokes', async (req, res) => {
             'Accept':'application/json'
           },
           params: {
+            'page': 1 + Math.floor(Math.random() * 13),
             'limit': req.body.quantity
           }
       })
       .then(results => {
-          console.log(results.data); // the results will be displayed on the terminal if the docker containers are running
+          //console.log(results.data); // the results will be displayed on the terminal if the docker containers are running
           res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
           return;
       })
@@ -172,7 +169,7 @@ app.post('/displayjokes', async (req, res) => {
           }
       })
       .then(results => {
-          console.log(results.data); // the results will be displayed on the terminal if the docker containers are running
+          //console.log(results.data); // the results will be displayed on the terminal if the docker containers are running
           res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
           return;
       })
@@ -196,11 +193,24 @@ app.post('/displayjokes', async (req, res) => {
               dataType:'json',
           })
         .then(response => {
+          z = 0;
+          found = 0;
+          while(z < i)
+          {
+            if(results[z].data.joke == response.data.joke)
+            {
+              found = 1;
+              break;
+            }
+            z += 1;
+          }
+          if(found == 0)
+          {
             results.push(response);
+            i += 1;
+          }
         })
-      i += 1;
     }
-    console.log(results[0].data);
     res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
   } else if(req.body.jokefilter == "geek")
   {
@@ -215,9 +225,23 @@ app.post('/displayjokes', async (req, res) => {
               dataType:'json',
           })
         .then(response => {
-            results.push(response);
+            z = 0;
+            found = 0;
+            while(z < i)
+            {
+              if(results[z].data.joke == response.data.joke)
+              {
+                found = 1;
+                break;
+              }
+              z += 1;
+            }
+            if(found == 0)
+            {
+              results.push(response);
+              i += 1;
+            }
         })
-      i += 1;
     }
     console.log(results[0].data);
     res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
@@ -234,9 +258,23 @@ app.post('/displayjokes', async (req, res) => {
               dataType:'json',
           })
         .then(response => {
+          z = 0;
+          found = 0;
+          while(z < i)
+          {
+            if(results[z].data == response.data)
+            {
+              found = 1;
+              break;
+            }
+            z += 1;
+          }
+          if(found == 0)
+          {
             results.push(response);
+            i += 1;
+          }
         })
-      i += 1;
     }
     console.log(results[0].data);
     res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
