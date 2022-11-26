@@ -57,8 +57,13 @@ app.get('/', (req, res) => {
 
 // Register submission
 app.post('/register', async (req, res) => {
-  //the logic goes here
-  console.log(req.body.password);
+  //user is found
+  const found = `select * from users where username = $1`;
+  let user = await db.any(found, req.body.username);
+  if (user.length != 0)
+  {
+    res.render("pages/register", {error : true, message: "Username Exist Try Another Username !"});
+  } 
   const hash = await bcrypt.hash(req.body.password, 10);
   const query = `INSERT INTO users(username, password, img_url) values ($1, $2, $3);`;
   db.any(query, [req.body.username, hash, req.body.img_url])
@@ -287,14 +292,17 @@ app.get("/logout", (req, res) => {
 
 
 app.post('/profilecu', async (req, res) => {
-
+  const found = `select * from users where username = $1`;
+  let user = await db.any(found, req.body.username);
+  if (user.length != 0)
+  {
+    res.render("pages/register", {error : true, message: "Username Exist Try Another Username !"});
+  } 
   const match = await bcrypt.compare(req.body.currentPasswordU, req.session.user.password);
   if(match){
-
     var newUsername = req.body.newUsername;
     var oldUsername = req.session.user.username;
     const query = 'UPDATE users SET username = $1 WHERE username = $2;';
-
     db.any(query, [
       newUsername,
       oldUsername,
