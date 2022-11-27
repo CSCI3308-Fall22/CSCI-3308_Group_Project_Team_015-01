@@ -49,6 +49,7 @@ console.log('Server is listening on port 3000');
 
 //Global Variables
 var joke_results = [];
+var saved = [];
 var removedSaved = 0;
 
 
@@ -153,7 +154,8 @@ app.post('/displayjokes/save', async (req, res) => {
       console.log(req.body.results);
       var results = [];
       results = joke_results;
-      res.render('pages/displayJokes', {img: req.session.user.img_url, type, results, message: 'Joke Saved Successfully'});
+      saved.push(req.body.post_joke);
+      res.render('pages/displayJokes', {img: req.session.user.img_url, type, results, saved, message: 'Joke Saved Successfully'});
     })
     .catch(function (err) {
       console.log('Failed to save joke');
@@ -182,6 +184,15 @@ app.post('/saved/remove', async (req, res) => {
     req.body.remove_joke,
   ])
   .then(results => {
+    var s_Length = saved.length;
+    console.log(saved);
+    for(let i=0; i<s_Length; i++){
+      if(saved[i] == req.body.remove_joke){
+        saved.splice(i,1);
+      }
+    }
+    console.log(saved);
+
     res.redirect('/saved');
     })
     .catch(err => {
@@ -210,7 +221,7 @@ app.post('/displayjokes', async (req, res) => {
       .then(results => {
           //console.log(results.data); // the results will be displayed on the terminal if the docker containers are running
           joke_results = results;
-          res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
+          res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, saved, error: false});
           return;
       })
       .catch(results => {
@@ -233,7 +244,7 @@ app.post('/displayjokes', async (req, res) => {
       .then(results => {
           //console.log(results.data); // the results will be displayed on the terminal if the docker containers are running
           joke_results = results;
-          res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
+          res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, saved, error: false});
           return;
       })
       .catch(results => {
@@ -275,7 +286,7 @@ app.post('/displayjokes', async (req, res) => {
         })
     }
     joke_results = results;
-    res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
+    res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, saved, error: false});
   } else if(req.body.jokefilter == "geek")
   {
     type = "geek";
@@ -309,7 +320,7 @@ app.post('/displayjokes', async (req, res) => {
     }
     console.log(results[0].data);
     joke_results = results;
-    res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
+    res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, saved, error: false});
   } else if(req.body.jokefilter == "bread")
   {
     type = "bread";
@@ -343,7 +354,7 @@ app.post('/displayjokes', async (req, res) => {
     }
     console.log(results[0].data);
     joke_results = results;
-    res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
+    res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, saved, error: false});
   }
 });
 app.get("/logout", (req, res) => {

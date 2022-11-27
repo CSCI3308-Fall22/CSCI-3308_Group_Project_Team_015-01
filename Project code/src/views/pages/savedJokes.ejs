@@ -37,6 +37,7 @@ background-attachment: fixed;">
             } else if(results[i].type == "bread"){
               saved_type = "Bread";
             }
+            //rgb(74, 184, 177)
 
             saved_entry += `
               <form action="/saved/remove" method="POST">
@@ -45,7 +46,7 @@ background-attachment: fixed;">
                   <input type="hidden" name="remove_type" value="${results[i].type}"/>
                   <td>${results[i].text}</td>
                   <input type="hidden" name="remove_joke" value="${results[i].text}"/>
-                  <td><button type="submit" style="background-color:rgb(74, 184, 177); border-color: rgb(10, 14, 28); color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Remove</button></td>
+                  <td><button type="submit" style="background-color:rgb(74, 184, 177); border: none; color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Remove</button></td>
                 </tr>
               </form>
                 `
@@ -58,7 +59,7 @@ background-attachment: fixed;">
     </table>
   </div>
     <div style="margin-left: 45%; margin-bottom: 3%;">
-    <a href="/jokes" style="background-color:rgb(245, 238, 252); border-color: rgb(255, 255, 255); color: black; font-size: 20px"class="btn btn-primary" >Back to Generate</a>
+    <a href="/jokes" style="background-color:rgb(47, 47, 47); border: none; color: rgb(205, 205, 205); font-weight:normal; font-size: 20px"class="btn btn-primary" >Generate More!</a>
   </div>
 
 </main>
