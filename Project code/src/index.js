@@ -47,6 +47,12 @@ app.use(
 app.listen(3000);
 console.log('Server is listening on port 3000');
 
+//Global Variables
+var joke_results = [];
+var saved = [];
+var removedSaved = 0;
+
+
 app.get('/login', (req, res) => {
   res.render('pages/login');
 }); 
@@ -133,6 +139,67 @@ app.get('/profile', (req, res) => {
   res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username});
 });
 
+app.post('/displayjokes/save', async (req, res) => {
+  var query ='INSERT INTO jokes(text,type) VALUES ($1,$3); INSERT INTO users_to_jokes(user_id, joke_id) VALUES((SELECT user_id FROM users WHERE username=$2 LIMIT 1),(SELECT joke_id FROM jokes ORDER BY joke_id DESC LIMIT 1));';
+  
+
+   db.any(query, [
+    req.body.post_joke,
+    req.session.user.username,
+    req.body.type,
+  ])
+    .then(function (rows) {
+      console.log('JOKE SAVED');
+      var type = req.body.type;
+      console.log(req.body.results);
+      var results = [];
+      results = joke_results;
+      saved.push(req.body.post_joke);
+      res.render('pages/displayJokes', {img: req.session.user.img_url, type, results, saved, message: 'Joke Saved Successfully'});
+    })
+    .catch(function (err) {
+      console.log('Failed to save joke');
+    });
+});
+
+app.get('/saved', (req, res) => {
+  var query =
+  `SELECT text,type FROM jokes INNER JOIN users_to_jokes ON users_to_jokes.joke_id=jokes.joke_id INNER JOIN users ON users_to_jokes.user_id = users.user_id WHERE users.username ='${req.session.user.username}' ;`;
+  db.any(query)
+  .then(results => {
+      console.log("results:");
+      console.log(results);
+      res.render('pages/savedJokes', {img: req.session.user.img_url, results});
+    })
+    .catch(results => {
+      console.log('Failed to load the saved jokes');
+      results = [];
+      res.render('pages/savedJokes',{img: req.session.user.img_url, results, error: true, message: "No Saved jokes."});
+    });
+});
+
+app.post('/saved/remove', async (req, res) => {
+  var query = 'DELETE FROM users_to_jokes WHERE joke_id = (SELECT joke_id FROM jokes WHERE text=$1 LIMIT 1); DELETE FROM jokes WHERE text = $1;';
+  db.any(query, [
+    req.body.remove_joke,
+  ])
+  .then(results => {
+    var s_Length = saved.length;
+    console.log(saved);
+    for(let i=0; i<s_Length; i++){
+      if(saved[i] == req.body.remove_joke){
+        saved.splice(i,1);
+      }
+    }
+    console.log(saved);
+
+    res.redirect('/saved');
+    })
+    .catch(err => {
+      return console.log(err);
+    });
+});
+
 app.post('/displayjokes', async (req, res) => {
   console.log(req.body.jokefilter);
   if(req.body.jokefilter == "dadJokes")
@@ -153,7 +220,8 @@ app.post('/displayjokes', async (req, res) => {
       })
       .then(results => {
           //console.log(results.data); // the results will be displayed on the terminal if the docker containers are running
-          res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
+          joke_results = results;
+          res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, saved, error: false});
           return;
       })
       .catch(results => {
@@ -175,7 +243,8 @@ app.post('/displayjokes', async (req, res) => {
       })
       .then(results => {
           //console.log(results.data); // the results will be displayed on the terminal if the docker containers are running
-          res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
+          joke_results = results;
+          res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, saved, error: false});
           return;
       })
       .catch(results => {
@@ -216,7 +285,8 @@ app.post('/displayjokes', async (req, res) => {
           }
         })
     }
-    res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
+    joke_results = results;
+    res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, saved, error: false});
   } else if(req.body.jokefilter == "geek")
   {
     type = "geek";
@@ -249,7 +319,8 @@ app.post('/displayjokes', async (req, res) => {
         })
     }
     console.log(results[0].data);
-    res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
+    joke_results = results;
+    res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, saved, error: false});
   } else if(req.body.jokefilter == "bread")
   {
     type = "bread";
@@ -282,7 +353,8 @@ app.post('/displayjokes', async (req, res) => {
         })
     }
     console.log(results[0].data);
-    res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
+    joke_results = results;
+    res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, saved, error: false});
   }
 });
 app.get("/logout", (req, res) => {
