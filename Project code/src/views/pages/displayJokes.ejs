@@ -24,17 +24,15 @@ background-attachment: fixed;">
           if(type == 'dadjokes'){
             jLength = results.data.results.length;
             console.log("Length of array: " + jLength);
+
             for (let i = 0; i < jLength; i++) {
-              console.log(results.data);
-              post_joke = results.data.results[i].joke
               joke_entry +=`
               <form action="/displayjokes/save" method="POST">
               <tr>
                 <td>Dad Jokes</td>
-                <td>${post_joke}</td>
-                <input type="hidden" name="post_joke" value="${post_joke}"/>
+                <td>${results.data.results[i].joke}</td>
+                <input type="hidden" name="post_joke" value="${results.data.results[i].joke}"/>
                 <input type="hidden" name="type" value="${type}"/>
-                <input type="hidden" name="results[]" value="${results}"/>
                 <td><button type="submit" style="background-color:rgb(184, 74, 184); border-color: rgb(184, 74, 184); color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Save</button></td>
               </tr>
             </form>
@@ -49,12 +47,17 @@ background-attachment: fixed;">
             console.log(results.data[0].joke);
 
             for (let i = 0; i < jLength; i++) {
+              console.log("TYPEEEE:" + type)
               joke_entry +=`
+              <form action="/displayjokes/save" method="POST">
               <tr>
                 <td>Yo Mama</td>
                 <td>${results.data[i].joke}</td>
+                <input type="hidden" name="post_joke" value="${results.data[i].joke}"/>
+                <input type="hidden" name="type" value="${type}"/>
                 <td><button type="submit" style="background-color:rgb(184, 74, 184); border-color: rgb(184, 74, 184); color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Save</button></td>
               </tr>
+            </form>
               `
             }
           }
@@ -66,12 +69,19 @@ background-attachment: fixed;">
             console.log(results[0].data.joke);
 
             for (let i = 0; i < jLength; i++) {
+              var frenchqa = ""
+              frenchqa = results[i].data.joke.question + " " + results[i].data.joke.answer
+              console.log(frenchqa);
               joke_entry +=`
+              <form action="/displayjokes/save" method="POST">
               <tr>
                 <td>Français</td>
                 <td>${results[i].data.joke.question}<br>${results[i].data.joke.answer}</td>
+                <input type="hidden" name="post_joke" value="${frenchqa}"/>
+                <input type="hidden" name="type" value="${type}"/>
                 <td><button type="submit" style="background-color:rgb(184, 74, 184); border-color: rgb(184, 74, 184); color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Save</button></td>
               </tr>
+            </form>
               `
             }
           }
@@ -84,11 +94,15 @@ background-attachment: fixed;">
 
             for (let i = 0; i < jLength; i++) {
               joke_entry +=`
+              <form action="/displayjokes/save" method="POST">
               <tr>
                 <td>Geek</td>
                 <td>${results[i].data.joke}</td>
+                <input type="hidden" name="post_joke" value="${results[i].data.joke}"/>
+                <input type="hidden" name="type" value="${type}"/>
                 <td><button type="submit" style="background-color:rgb(184, 74, 184); border-color: rgb(184, 74, 184); color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Save</button></td>
               </tr>
+            </form>
               `
             }
           }
@@ -101,11 +115,15 @@ background-attachment: fixed;">
 
             for (let i = 0; i < jLength; i++) {
               joke_entry +=`
+              <form action="/displayjokes/save" method="POST">
               <tr>
                 <td>Bread</td>
                 <td>${results[i].data}</td>
+                <input type="hidden" name="post_joke" value="${results[i].data}"/>
+                <input type="hidden" name="type" value="${type}"/>
                 <td><button type="submit" style="background-color:rgb(184, 74, 184); border-color: rgb(184, 74, 184); color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Save</button></td>
               </tr>
+            </form>
               `
             }
           }

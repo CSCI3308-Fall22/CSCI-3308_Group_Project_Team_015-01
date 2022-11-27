@@ -139,12 +139,13 @@ app.get('/profile', (req, res) => {
 });
 
 app.post('/displayjokes/save', async (req, res) => {
-  var query ='INSERT INTO jokes(text) VALUES ($1); INSERT INTO users_to_jokes(user_id, joke_id) VALUES((SELECT user_id FROM users WHERE username=$2 LIMIT 1),(SELECT joke_id FROM jokes ORDER BY joke_id DESC LIMIT 1));';
+  var query ='INSERT INTO jokes(text,type) VALUES ($1,$3); INSERT INTO users_to_jokes(user_id, joke_id) VALUES((SELECT user_id FROM users WHERE username=$2 LIMIT 1),(SELECT joke_id FROM jokes ORDER BY joke_id DESC LIMIT 1));';
   
 
    db.any(query, [
     req.body.post_joke,
     req.session.user.username,
+    req.body.type,
   ])
     .then(function (rows) {
       console.log('JOKE SAVED');
@@ -161,7 +162,7 @@ app.post('/displayjokes/save', async (req, res) => {
 
 app.get('/saved', (req, res) => {
   var query =
-  `SELECT text FROM jokes INNER JOIN users_to_jokes ON users_to_jokes.joke_id=jokes.joke_id INNER JOIN users ON users_to_jokes.user_id = users.user_id WHERE users.username ='${req.session.user.username}' ;`;
+  `SELECT text,type FROM jokes INNER JOIN users_to_jokes ON users_to_jokes.joke_id=jokes.joke_id INNER JOIN users ON users_to_jokes.user_id = users.user_id WHERE users.username ='${req.session.user.username}' ;`;
   db.any(query)
   .then(results => {
       console.log("results:");
@@ -176,10 +177,10 @@ app.get('/saved', (req, res) => {
 });
 
 app.post('/saved/remove', async (req, res) => {
-  var query = 
-  `DELETE FROM users_to_jokes WHERE joke_id = (SELECT joke_id FROM jokes WHERE text='${req.body.remove_joke}' LIMIT 1);
-  DELETE FROM jokes WHERE text = '${req.body.remove_joke}';`;
-  db.any(query)
+  var query = 'DELETE FROM users_to_jokes WHERE joke_id = (SELECT joke_id FROM jokes WHERE text=$1 LIMIT 1); DELETE FROM jokes WHERE text = $1;';
+  db.any(query, [
+    req.body.remove_joke,
+  ])
   .then(results => {
     res.redirect('/saved');
     })
@@ -231,6 +232,7 @@ app.post('/displayjokes', async (req, res) => {
       })
       .then(results => {
           //console.log(results.data); // the results will be displayed on the terminal if the docker containers are running
+          joke_results = results;
           res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
           return;
       })
@@ -272,6 +274,7 @@ app.post('/displayjokes', async (req, res) => {
           }
         })
     }
+    joke_results = results;
     res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
   } else if(req.body.jokefilter == "geek")
   {
@@ -305,6 +308,7 @@ app.post('/displayjokes', async (req, res) => {
         })
     }
     console.log(results[0].data);
+    joke_results = results;
     res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
   } else if(req.body.jokefilter == "bread")
   {
@@ -338,6 +342,7 @@ app.post('/displayjokes', async (req, res) => {
         })
     }
     console.log(results[0].data);
+    joke_results = results;
     res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: false});
   }
 });
