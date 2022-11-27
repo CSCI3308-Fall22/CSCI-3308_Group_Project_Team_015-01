@@ -35,9 +35,12 @@ background-attachment: fixed;">
               bg_color = "rgb(184, 74, 184)";
               b_word = "Save";
               taken = 0;
+              console.log("Length of saved: " + saved_length);
               if(saved_length != 0){
                 for(let j=0; j< saved_length; j++){
-                  if(results.data.results[i].joke == saved[j]){
+                  console.log(results.data.results[i].joke);
+                  console.log(saved[j].text);
+                  if(results.data.results[i].joke == saved[j].text){
                     taken =1;
                   }
                 }
@@ -66,16 +69,47 @@ background-attachment: fixed;">
           else if(type == 'yoMama'){
             jLength =  results.data.length;
             console.log("Length of array: " + jLength);
-            console.log(results.data[0].joke);
-
-            for (let i = 0; i < jLength; i++) {
+            if(jLength == 1)
+            {
+              for (let i = 0; i < jLength; i++) {
+                disabled = "";
+                bg_color = "rgb(184, 74, 184)";
+                b_word = "Save";
+                taken = 0;
+                if(saved_length != 0){
+                  for(let j=0; j< saved_length; j++){
+                    if(results.data.joke == saved[j].text){
+                      taken =1;
+                    }
+                  }
+                }
+  
+                if(taken == 1){
+                  disabled = "disabled";
+                  bg_color = "rgb(133, 132, 132)";
+                  b_word = "Saved";
+                }
+                joke_entry +=`
+                <form action="/displayjokes/save" method="POST">
+                  <tr>
+                    <td>Yo Mama</td>
+                    <td>${results.data.joke}</td>
+                    <input type="hidden" name="post_joke" value="${results.data.joke}"/>
+                    <input type="hidden" name="type" value="${type}"/>
+                    <td><button type="submit" style="background-color:${bg_color}; border: none; color: black; font-weight: bold;"class="btn btn-primary" ${disabled}>${b_word}</button></td>
+                  </tr>
+                </form>
+                `
+                }
+            } else{
+              for (let i = 0; i < jLength; i++) {
               disabled = "";
               bg_color = "rgb(184, 74, 184)";
               b_word = "Save";
               taken = 0;
               if(saved_length != 0){
                 for(let j=0; j< saved_length; j++){
-                  if(results.data[i].joke == saved[j]){
+                  if(results.data[i].joke == saved[j].text){
                     taken =1;
                   }
                 }
@@ -88,15 +122,16 @@ background-attachment: fixed;">
               }
               joke_entry +=`
               <form action="/displayjokes/save" method="POST">
-              <tr>
-                <td>Yo Mama</td>
-                <td>${results.data[i].joke}</td>
-                <input type="hidden" name="post_joke" value="${results.data[i].joke}"/>
-                <input type="hidden" name="type" value="${type}"/>
-                <td><button type="submit" style="background-color:${bg_color}; border: none; color: black; font-weight: bold;"class="btn btn-primary" ${disabled}>${b_word}</button></td>
-              </tr>
-            </form>
+                <tr>
+                  <td>Yo Mama</td>
+                  <td>${results.data[i].joke}</td>
+                  <input type="hidden" name="post_joke" value="${results.data[i].joke}"/>
+                  <input type="hidden" name="type" value="${type}"/>
+                  <td><button type="submit" style="background-color:${bg_color}; border: none; color: black; font-weight: bold;"class="btn btn-primary" ${disabled}>${b_word}</button></td>
+                </tr>
+              </form>
               `
+              }
             }
           }
 
@@ -117,7 +152,7 @@ background-attachment: fixed;">
               taken = 0;
               if(saved_length != 0){
                 for(let j=0; j< saved_length; j++){
-                  if(frenchqa == saved[j]){
+                  if(frenchqa == saved[j].text){
                     taken =1;
                   }
                 }
@@ -155,7 +190,7 @@ background-attachment: fixed;">
               taken = 0;
               if(saved_length != 0){
                 for(let j=0; j< saved_length; j++){
-                  if(results[i].data.joke == saved[j]){
+                  if(results[i].data.joke == saved[j].text){
                     taken =1;
                   }
                 }
@@ -173,7 +208,7 @@ background-attachment: fixed;">
                 <td>${results[i].data.joke}</td>
                 <input type="hidden" name="post_joke" value="${results[i].data.joke}"/>
                 <input type="hidden" name="type" value="${type}"/>
-                <td><button type="submit" style="background-color:${bg_color}; border: none; color: black; font-weight: bold;"class="btn btn-primary" ${disabled}>${b_word}</button></td>
+                <td><button type="submit" style="background-color:${bg_color}; border: none; color: black; font-weight: bold;" class="btn btn-primary" ${disabled}>${b_word}</button></td>
               </tr>
             </form>
               `
@@ -193,7 +228,7 @@ background-attachment: fixed;">
               taken = 0;
               if(saved_length != 0){
                 for(let j=0; j< saved_length; j++){
-                  if(results[i].data == saved[j]){
+                  if(results[i].data == saved[j].text){
                     taken =1;
                   }
                 }
