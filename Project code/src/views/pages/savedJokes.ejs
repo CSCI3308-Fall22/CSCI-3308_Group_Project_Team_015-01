@@ -1,0 +1,48 @@
+<%- include ('../partials/header') %>
+<%- include ('../partials/menu2') %>
+<body style="background-image: url('https://i.imgur.com/Ao6KnYX.jpg'); background-size: cover; background-repeat: no-repeat;
+background-attachment: fixed;">
+<main>
+  <div class="col"><%- include ('../partials/message') %></div>
+  <div class="container">
+    <!-- THE REST OF YOUR HTML CODE GOES HERE -->
+    <table class="table table-striped table-dark" style="width: 100%; margin-top: 3%;">
+      <tr>
+        <th>Joke</th> 
+        <th></th>
+      </tr>
+      <tbody>
+        <%
+        var saved_entry = "";
+        var sLength = 0;
+      
+        
+        sLength = results.length;
+        console.log(sLength);
+        if(sLength != 0){
+          for (let i = 0; i < sLength; i++) {
+            saved_entry += `
+              <form action="/saved/remove" method="POST">
+                <tr>
+                  <td>${results[i].text}</td>
+                  <input type="hidden" name="remove_joke" value="${results[i].text}"/>
+                  <td><button type="submit" style="background-color:rgb(74, 184, 177); border-color: rgb(10, 14, 28); color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Remove</button></td>
+                </tr>
+              </form>
+                `
+          }
+        }
+      
+          %>
+        <%- saved_entry %>
+      </tbody>
+    </table>
+  </div>
+    <div style="margin-left: 45%; margin-bottom: 3%;">
+    <a href="/jokes" style="background-color:rgb(245, 238, 252); border-color: rgb(255, 255, 255); color: black; font-size: 20px"class="btn btn-primary" >Back to Generate</a>
+  </div>
+
+</main>
+</body>
+
+<%- include ('../partials/footer') %>
