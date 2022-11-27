@@ -17,6 +17,7 @@ background-attachment: fixed;">
         <%
         var joke_entry = "";
         var jLength = 0;
+        var post_joke = "";
         if(results){
 
 
@@ -25,13 +26,18 @@ background-attachment: fixed;">
             console.log("Length of array: " + jLength);
             for (let i = 0; i < jLength; i++) {
               console.log(results.data);
-            
+              post_joke = results.data.results[i].joke
               joke_entry +=`
+              <form action="/displayjokes/save" method="POST">
               <tr>
                 <td>Dad Jokes</td>
-                <td>${results.data.results[i].joke}</td>
+                <td>${post_joke}</td>
+                <input type="hidden" name="post_joke" value="${post_joke}"/>
+                <input type="hidden" name="type" value="${type}"/>
+                <input type="hidden" name="results[]" value="${results}"/>
                 <td><button type="submit" style="background-color:rgb(184, 74, 184); border-color: rgb(184, 74, 184); color: black; font-weight: bold;"class="btn btn-primary" target="_blank">Save</button></td>
               </tr>
+            </form>
               `
             }
           }
