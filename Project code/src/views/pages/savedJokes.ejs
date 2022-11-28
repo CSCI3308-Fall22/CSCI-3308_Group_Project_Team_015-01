@@ -40,7 +40,7 @@ background-attachment: fixed;">
             //rgb(74, 184, 177)
 
             saved_entry += `
-              <form action="/saved/remove" method="POST">
+              <form action="/saved/remove/${results[i].joke_id}" method="POST">
                 <tr>
                   <td>${saved_type}</td>
                   <input type="hidden" name="remove_type" value="${results[i].type}"/>

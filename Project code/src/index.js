@@ -68,7 +68,8 @@ app.post('/register', async (req, res) => {
   let user = await db.any(found, req.body.username);
   if (user.length != 0)
   {
-    res.render("pages/register", {error : true, message: "Username Exist Try Another Username !"});
+    res.render("pages/register", {error : true, message: "Username Exists, Try Another Username!"});
+    return;
   } 
   const hash = await bcrypt.hash(req.body.password, 10);
   const query = `INSERT INTO users(username, password, img_url) values ($1, $2, $3);`;
@@ -78,7 +79,7 @@ app.post('/register', async (req, res) => {
           res.render("pages/login", {message: "Account Successfully Created!"});
       })
       .catch(function (err) {
-          res.render("pages/register.ejs", {message: `Username were Used by Another User Try different one` });
+          res.render("pages/register", {message: `Username was Used by Another User, Try a different one` });
           // console.log(req.body.username) ;
           // res.status(401);
       })
@@ -139,7 +140,7 @@ app.get('/profile', (req, res) => {
   res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username});
 });
 
-app.post('/displayjokes/save', async (req, res) => {
+app.post('/displayjokes/save', (req, res) => {
   var query ='INSERT INTO jokes(text,type) VALUES ($1,$3); INSERT INTO users_to_jokes(user_id, joke_id) VALUES((SELECT user_id FROM users WHERE username=$2 LIMIT 1),(SELECT joke_id FROM jokes ORDER BY joke_id DESC LIMIT 1));';
   
 
@@ -151,11 +152,16 @@ app.post('/displayjokes/save', async (req, res) => {
     .then(function (rows) {
       console.log('JOKE SAVED');
       var type = req.body.type;
-      console.log(req.body.results);
+      //console.log(req.body.results);
       var results = [];
       results = joke_results;
-      saved.push(req.body.post_joke);
-      res.render('pages/displayJokes', {img: req.session.user.img_url, type, results, saved, message: 'Joke Saved Successfully'});
+      query2 = `SELECT text,jokes.joke_id FROM jokes INNER JOIN users_to_jokes ON users_to_jokes.joke_id=jokes.joke_id INNER JOIN users ON users_to_jokes.user_id = users.user_id WHERE users.username ='${req.session.user.username}' ;`;
+      db.any(query2)
+      .then(results1 => {
+        saved = results1;
+        //console.log(saved);
+        res.render('pages/displayJokes', {img: req.session.user.img_url, type, results, saved, message: 'Joke Saved Successfully'});
+      })
     })
     .catch(function (err) {
       console.log('Failed to save joke');
@@ -164,7 +170,7 @@ app.post('/displayjokes/save', async (req, res) => {
 
 app.get('/saved', (req, res) => {
   var query =
-  `SELECT text,type FROM jokes INNER JOIN users_to_jokes ON users_to_jokes.joke_id=jokes.joke_id INNER JOIN users ON users_to_jokes.user_id = users.user_id WHERE users.username ='${req.session.user.username}' ;`;
+  `SELECT text,type,jokes.joke_id FROM jokes INNER JOIN users_to_jokes ON users_to_jokes.joke_id=jokes.joke_id INNER JOIN users ON users_to_jokes.user_id = users.user_id WHERE users.username ='${req.session.user.username}' ;`;
   db.any(query)
   .then(results => {
       console.log("results:");
@@ -178,21 +184,12 @@ app.get('/saved', (req, res) => {
     });
 });
 
-app.post('/saved/remove', async (req, res) => {
-  var query = 'DELETE FROM users_to_jokes WHERE joke_id = (SELECT joke_id FROM jokes WHERE text=$1 LIMIT 1); DELETE FROM jokes WHERE text = $1;';
-  db.any(query, [
-    req.body.remove_joke,
-  ])
+app.post('/saved/remove/:joke_id', (req, res) => {
+  const query1 = 'DELETE from users_to_jokes where joke_id = $1;';
+  db.any(query1, [req.params.joke_id]);
+  const query = "DELETE from jokes where joke_id = $1;";
+  db.any(query, [req.params.joke_id])
   .then(results => {
-    var s_Length = saved.length;
-    console.log(saved);
-    for(let i=0; i<s_Length; i++){
-      if(saved[i] == req.body.remove_joke){
-        saved.splice(i,1);
-      }
-    }
-    console.log(saved);
-
     res.redirect('/saved');
     })
     .catch(err => {
@@ -202,6 +199,12 @@ app.post('/saved/remove', async (req, res) => {
 
 app.post('/displayjokes', async (req, res) => {
   console.log(req.body.jokefilter);
+  query2 = `SELECT text FROM jokes INNER JOIN users_to_jokes ON users_to_jokes.joke_id=jokes.joke_id INNER JOIN users ON users_to_jokes.user_id = users.user_id WHERE users.username ='${req.session.user.username}' ;`;
+      db.any(query2)
+      .then(results1 => {
+        saved = results1;
+        console.log(saved);
+      })
   if(req.body.jokefilter == "dadJokes")
   {
     type = "dadjokes";
@@ -242,9 +245,17 @@ app.post('/displayjokes', async (req, res) => {
           }
       })
       .then(results => {
-          //console.log(results.data); // the results will be displayed on the terminal if the docker containers are running
+          console.log(results.data); // the results will be displayed on the terminal if the docker containers are running
           joke_results = results;
-          res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, saved, error: false});
+          ymamaLength = 0;
+          if(req.body.quantity == 1)
+          {
+            ymamaLength = 1;
+            results.data.length = 1;
+          }
+          console.log(ymamaLength);
+          console.log(results.data.length);
+          res.render('pages/displayJokes',{img: req.session.user.img_url, type, ymamaLength, results, saved, error: false});
           return;
       })
       .catch(results => {
@@ -368,7 +379,8 @@ app.post('/profilecu', async (req, res) => {
   let user = await db.any(found, req.body.username);
   if (user.length != 0)
   {
-    res.render("pages/register", {error : true, message: "Username Exist Try Another Username !"});
+    res.render("pages/register", {error : true, message: "Username Exists, Try Another Username!"});
+    return;
   } 
   const match = await bcrypt.compare(req.body.currentPasswordU, req.session.user.password);
   if(match){
