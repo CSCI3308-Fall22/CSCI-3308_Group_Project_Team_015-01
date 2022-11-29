@@ -7,7 +7,7 @@ chai.use(chaiHttp);
 const express = require('express');
 const session = require('express-session');
 const app = express();
-const dotenv = require('dotenv').config({path:'../.env'});
+// const dotenv = require('dotenv').config({path:'../.env'});
 
 app.use(session({
       secret: process.env.SESSION_SECRET,
@@ -40,7 +40,7 @@ describe('Register/Login/Logout',() => {
      * Test the Post Register route
      */
     describe("POST /register", function() {
-        it('Successful registration'), (done) => {
+        it('Successful registration', (done) => {
             let user = {
             "username":"",
             "password":"",
@@ -54,7 +54,7 @@ describe('Register/Login/Logout',() => {
             //         done();
             //     });
             done();
-        };
+        });
         it('Empty strings', (done) => {
             let user = {
             "username":"",
