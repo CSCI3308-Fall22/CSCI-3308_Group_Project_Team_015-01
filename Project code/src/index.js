@@ -376,10 +376,10 @@ app.get("/logout", (req, res) => {
 
 app.post('/profilecu', async (req, res) => {
   const found = `select * from users where username = $1`;
-  let user = await db.any(found, req.body.username);
+  let user = await db.any(found, req.body.newUsername);
   if (user.length != 0)
   {
-    res.render("pages/register", {error : true, message: "Username Exists, Try Another Username!"});
+    res.render("pages/profile", {img: req.session.user.img_url, username: req.session.user.username,error : true, message: "Username Exists, Try Another Username!"});
     return;
   } 
   const match = await bcrypt.compare(req.body.currentPasswordU, req.session.user.password);
@@ -403,7 +403,7 @@ app.post('/profilecu', async (req, res) => {
 
   }else{
     console.log("Incorrect Password");
-    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Incorrect Password'});
+    res.render('pages/profile', {img: req.session.user.img_url,error : true, username: req.session.user.username, message: 'Incorrect Password'});
   }
 });
 
