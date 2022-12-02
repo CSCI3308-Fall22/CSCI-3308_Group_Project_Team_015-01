@@ -1,8 +1,10 @@
 const chai = require('chai');
-const {expect,assert,should, request} = require('chai');
 const chaiHttp = require('chai-http');
-
 chai.use(chaiHttp);
+const {expect,assert} = require('chai');
+const should = chai.should();
+const request = require('supertest');
+
 
 const express = require('express');
 const session = require('express-session');
@@ -17,13 +19,7 @@ app.use(session({
   );
 
 const server = require('../index');
-
-// module.exports = function(app, db, conf){
-//     return function performTest() {
-//       var test = server(app, db, conf);
-//       test();
-//     }
-//   }
+const res = chai.request(server);
 
 before((done) => {
 
@@ -42,63 +38,67 @@ describe('Register/Login/Logout',() => {
     describe("POST /register", function() {
         it('Successful registration', (done) => {
             let user = {
-            "username":"",
-            "password":"",
-            "img_url":""
+            "username":"Clown",
+            "password":"isClown##12",
+            "img_url":"https://www.rainforest-alliance.org/wp-content/uploads/2021/06/capybara-square-1.jpg.optimal.jpg"
             }
-            const res = chai.request(server)
-            //     .post('/register')
-            //     .send(user)
-            //     .end((err, res) => {
-            //         // res.should.have.status(200);
-            //         done();
-            //     });
-            done();
+            request(app)
+            .post('/register')
+            .type('form')
+            .send(user)
+            .end(function(err, res){
+                res.body.should.be.a("object");
+                expect(err).to.be.null;
+                done();
+            });
         });
         it('Empty strings', (done) => {
-            let user = {
+            let User = {
             "username":"",
             "password":"",
             "img_url":""
             }
-            const res = chai.request(server)
-                // .post('/register')
-                // .send(user)
-                // .end((err, res) => {
-                //     // res.should.have.status(200);
-                //     done();
-                // });
-                done();
+            request(app)
+                .post('/register')
+                .type('form')
+                .send(User)
+                .end(function(err, res){
+                    res.body.should.be.a("object");
+                    expect(err).to.exist;
+                    done();
+                });
         });
         it('Too short, no numbers, no special', (done) => {
             let user = {
-            "username":"",
-            "password":"",
-            "img_url":""
+            "username":"hahaha",
+            "password":"abcdef",
+            "img_url":"https://www.rainforest-alliance.org/wp-content/uploads/2021/06/capybara-square-1.jpg.optimal.jpg"
             }
-            const res = chai.request(server)
-                // .post('/register')
-                // .send(user)
-                // .end((err, res) => {
-                //     // res.should.have.status(200);
-                //     done();
-                // });
-                done();
+            request(app)
+                .post('/register')
+                .type('form')
+                .send(user)
+                .end(function(err, res){
+                    res.body.should.be.a("object");
+                    expect(err).to.exist;
+                    done();
+                });
         });
         it('Username already exists', (done) => {
             let user = {
-            "username":"",
-            "password":"",
-            "img_url":""
+            "username":"admin",
+            "password":"admin",
+            "img_url":"https://www.rainforest-alliance.org/wp-content/uploads/2021/06/capybara-square-1.jpg.optimal.jpg"
             }
-            const res = chai.request(server)
-                // .post('/register')
-                // .send(user)
-                // .end((err, res) => {
-                //     // res.should.have.status(200);
-                //     done();
-                // });
-                done();
+            request(app)
+                .post('/register')
+                .type('form')
+                .send(user)
+                .end(function(err, res){
+                    res.body.should.be.a("object");
+                    expect(err).to.exist;
+                    done();
+                });
         });
 
     });
@@ -109,20 +109,18 @@ describe('Register/Login/Logout',() => {
     describe("POST /login", function() {
         it('Successful login', (done) => {
             let user = {
-            "username":"",
-            "password":"",
-            "img_url":""
+            "username":"Clown",
+            "password":"isClown##12"
             }
-            const res = chai.request(server)
-            //     .post('/login')
-            //     .send(user)
-            //     .end((err, res) => {
-            //         res.should.have.status(200);
-            //         done();
-            //     });
-
-            done();
-
+            request(app)
+                .post('/login')
+                .type('form')
+                .send(user)
+            .end(function(err, res){
+                res.body.should.be.a("object");
+                expect(err).to.be.null;
+                done();
+            });
         });
 
         it('Empty strings', (done) => {
@@ -131,31 +129,32 @@ describe('Register/Login/Logout',() => {
             "password":"",
             "img_url":""
             }
-            const res = chai.request(server)
-            //     .post('/login')
-            //     .send(user)
-            //     .end((err, res) => {
-            //         res.should.have.status(200);
-            //         done();
-            //     });
-
-            done();
+            request(app)
+                .post('/login')
+                .type('form')
+                .send(user)
+            .end(function(err, res){
+                res.body.should.be.a("object");
+                expect(err).to.exist;
+                done();
+            });
         });
 
         it('Incorrect password for login', (done) => {
             let user = {
-            "username":"",
-            "password":"",
-            "img_url":""
+            "username":"Clown",
+            "password":"notClown11$$",
+            "img_url":"https://www.rainforest-alliance.org/wp-content/uploads/2021/06/capybara-square-1.jpg.optimal.jpg"
             }
-            const res = chai.request(server)
-            //     .post('/login')
-            //     .send(user)
-            //     .end((err, res) => {
-            //         res.should.have.status(200);
-            //         done();
-            //     });
-            done();
+            request(app)
+                .post('/login')
+                .type('form')
+                .send(user)
+            .end(function(err, res){
+                res.body.should.be.a("object");
+                expect(err).to.exist;
+                done();
+            });
         });
     });
 
@@ -164,10 +163,12 @@ describe('Register/Login/Logout',() => {
      */
     describe("GET /logout", function() {
         it('Successful logout', (done) =>{
-            const res = chai.request(server)
-            // .get('/logout')
-            // .expect()
-            done();
+            request(app)
+            .get('/logout')
+            .end(function(err, res){
+                expect(err).to.be.null;
+                done();
+            });
         });
     });
 });
@@ -177,7 +178,7 @@ describe("Joke Generating", function(){
      * Testing Joke Generation
      */
     it('Joke type must be specified', (done) => {
-        const res = chai.request(server)
+        
             // .end((err, res) => {
             //     // res.should.have.status(200);
             //     done();
@@ -186,7 +187,7 @@ describe("Joke Generating", function(){
     });
 
     it('Fill filter fields', (done) => {
-        const res = chai.request(server)
+        
             // .end((err, res) => {
             //     // res.should.have.status(200);
             //     done();
@@ -195,7 +196,7 @@ describe("Joke Generating", function(){
     });
 
     it('Removing filter resets jokes', (done) => {
-        const res = chai.request(server)
+        
             // .end((err, res) => {
             //     // res.should.have.status(200);
             //     done();
@@ -204,7 +205,7 @@ describe("Joke Generating", function(){
     });
 
     it('Can handle no keywords', (done) => {
-        const res = chai.request(server)
+        
             // .end((err, res) => {
             //     // res.should.have.status(200);
             //     done();
@@ -212,7 +213,7 @@ describe("Joke Generating", function(){
             done();
     });
     it('Can handle multiple keywords', (done) => {
-        const res = chai.request(server)
+        
             // .end((err, res) => {
             //     // res.should.have.status(200);
             //     done();
@@ -220,7 +221,7 @@ describe("Joke Generating", function(){
             done();
     })
     it('Removing keyword resets jokes', (done) => {
-        const res = chai.request(server)
+        
             // .end((err, res) => {
             //     // res.should.have.status(200);
             //     done();
@@ -228,7 +229,7 @@ describe("Joke Generating", function(){
             done();
     });
     it('Returned jokes fit all filters and keywords', (done) => {
-        const res = chai.request(server)
+        
             // .end((err, res) => {
             //     // res.should.have.status(200);
             //     done();
@@ -236,7 +237,7 @@ describe("Joke Generating", function(){
             done();
     });
     it('No jokes found', (done) => {
-        const res = chai.request(server);
+        ;
         done();
     });
 });
@@ -246,7 +247,7 @@ describe("Joke Saving/Recall", function(){
      * Test Joke Saving and Recall
      */
     it('Saved jokes can be recalled', (done) => {
-        const res = chai.request(server)
+        
             // .end((err, res) => {
             //     // res.should.have.status(200);
             //     done();
@@ -254,7 +255,7 @@ describe("Joke Saving/Recall", function(){
             done();
     });
     it('Deleting an unsaved joke', (done) => {
-        const res = chai.request(server)
+        
             // .end((err, res) => {
             //     // res.should.have.status(200);
             //     done();
@@ -262,7 +263,7 @@ describe("Joke Saving/Recall", function(){
             done();
     })
     it('Recalling a deleted joke', (done) => {
-        const res = chai.request(server)
+        
             // .end((err, res) => {
             //     // res.should.have.status(200);
             //     done();
@@ -270,7 +271,7 @@ describe("Joke Saving/Recall", function(){
             done();
     });
     it('Attempting to save an already saved joke', (done) => {
-        const res = chai.request(server)
+        
             // .end((err, res) => {
             //     // res.should.have.status(200);
             //     done();
@@ -278,7 +279,7 @@ describe("Joke Saving/Recall", function(){
             done();
     })
     it('Saving more than 25 jokes', (done) => {
-        const res = chai.request(server)
+        
             // .end((err, res) => {
             //     // res.should.have.status(200);
             //     done();
