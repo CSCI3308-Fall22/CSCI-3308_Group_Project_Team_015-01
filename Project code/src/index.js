@@ -190,7 +190,7 @@ app.post('/saved/remove/:joke_id', (req, res) => {
   const query = "DELETE from jokes where joke_id = $1;";
   db.any(query, [req.params.joke_id])
   .then(results => {
-    res.redirect('/saved');
+    res.redirect('/save');
     })
     .catch(err => {
       return console.log(err);
@@ -222,7 +222,6 @@ app.post('/displayjokes', async (req, res) => {
           }
       })
       .then(results => {
-          //console.log(results.data); // the results will be displayed on the terminal if the docker containers are running
           joke_results = results;
           res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, saved, error: false});
           return;
@@ -398,7 +397,7 @@ app.post('/profilecu', async (req, res) => {
     })
     .catch(function (err){
       console.log("Username Edit Unsuccessful");
-      res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Username Edit Unsuccessful'});
+      res.render('pages/profile', {img: req.session.user.img_url, error : true, username: req.session.user.username, message: 'Username Edit Unsuccessful'});
     });
 
   }else{
@@ -428,12 +427,12 @@ app.post('/profileca', async (req, res) => {
     })
     .catch(function (err){
       console.log("Avatar Edit Unsuccessful");
-      res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Avatar Edit Unsuccessful'});
+      res.render('pages/profile', {img: req.session.user.img_url, error : true, username: req.session.user.username, message: 'Avatar Edit Unsuccessful'});
     });
 
   }else{
     console.log("Incorrect Password");
-    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Incorrect Password'});
+    res.render('pages/profile', {img: req.session.user.img_url, error : true, username: req.session.user.username, message: 'Incorrect Password'});
   }
 });
 
@@ -459,16 +458,16 @@ app.post('/profilecp', async (req, res) => {
       })
       .catch(function (err){
         console.log("Password Edit Unsuccessful");
-        res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Password Edit Unsuccessful'});
+        res.render('pages/profile', {img: req.session.user.img_url, error : true, username: req.session.user.username, message: 'Password Edit Unsuccessful'});
       });
 
     }else{
       console.log("New Password Fields Did Not Match");
-      res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'New Password Fields Did Not Match'});
+      res.render('pages/profile', {img: req.session.user.img_url, error : true, username: req.session.user.username, message: 'New Password Fields Did Not Match'});
     }
 
   }else{
     console.log("Incorrect Current Password");
-    res.render('pages/profile', {img: req.session.user.img_url, username: req.session.user.username, message: 'Incorrect Current Password'});
+    res.render('pages/profile', {img: req.session.user.img_url, error : true, username: req.session.user.username, message: 'Incorrect Current Password'});
   }
 });
