@@ -235,35 +235,40 @@ app.post('/displayjokes', async (req, res) => {
   } else if(req.body.jokefilter == "yoMama")
   {
     type = "yoMama"; 
-    axios({
-      url: `http://yomamma-api.herokuapp.com/jokes`,
-          method: 'GET',
-          dataType:'json',
-          params: {
-            'count': req.body.quantity
-          }
-      })
-      .then(results => {
-          console.log(results.data); // the results will be displayed on the terminal if the docker containers are running
-          joke_results = results;
-          ymamaLength = 0;
-          if(req.body.quantity == 1)
+    let results = new Array();
+    i = 0
+    while(i < req.body.quantity)
+    {
+      await axios({
+        url: `https://api.yomomma.info/`,
+              method: 'GET',
+              dataType:'json',
+          })
+        .then(response => {
+          z = 0;
+          found = 0;
+          while(z < i)
           {
-            ymamaLength = 1;
-            results.data.length = 1;
+            if(results[z].data.joke == response.data.joke)
+            {
+              found = 1;
+              break;
+            }
+            z += 1;
           }
-          console.log(ymamaLength);
-          console.log(results.data.length);
-          res.render('pages/displayJokes',{img: req.session.user.img_url, type, ymamaLength, results, saved, error: false});
-          return;
-      })
-      .catch(results => {
-      // Handle errors
-          results = [];
-          res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, error: true, message: "No jokes found."});
-          return;
-      });
-
+          if(found == 0)
+          {
+            results.push(response);
+            i += 1;
+          }
+        })
+    }
+    joke_results = results;
+    // console.log(results.data);
+    console.log(results[0].data.joke);
+    console.log(results[5].data.joke);
+    console.log(results.length);
+    res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, saved, error: false});
   } else if(req.body.jokefilter == "french")
   {
     type = "french";
