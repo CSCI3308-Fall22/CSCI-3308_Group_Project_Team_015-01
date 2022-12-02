@@ -21,7 +21,7 @@ This application utilizes the joke APIs icanhazdadjoke, YOMOMMA, Blauge.xyz, Gee
   - YOMOMMA API
   - Blauge.xyz
   - Geek Joke API
-  - Bread Puns API
+  - Bread Puns API (purged by Heroku, no longer functions)
 - Testing Tool: Chai, Mocha
 - Deployment Environment: LocalHost and Class Environment
 - UI Tools: HTML, EJS
