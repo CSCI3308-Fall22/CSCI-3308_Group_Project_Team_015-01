@@ -190,7 +190,7 @@ app.post('/saved/remove/:joke_id', (req, res) => {
   const query = "DELETE from jokes where joke_id = $1;";
   db.any(query, [req.params.joke_id])
   .then(results => {
-    res.redirect('/save');
+    res.redirect('/saved');
     })
     .catch(err => {
       return console.log(err);
