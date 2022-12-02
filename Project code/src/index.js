@@ -265,8 +265,6 @@ app.post('/displayjokes', async (req, res) => {
     }
     joke_results = results;
     // console.log(results.data);
-    console.log(results[0].data.joke);
-    console.log(results[5].data.joke);
     console.log(results.length);
     res.render('pages/displayJokes',{img: req.session.user.img_url, type, results, saved, error: false});
   } else if(req.body.jokefilter == "french")
