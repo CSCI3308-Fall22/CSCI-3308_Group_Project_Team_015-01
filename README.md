@@ -43,10 +43,10 @@ This application utilizes the joke APIs icanhazdadjoke, YOMOMMA, Blauge.xyz, Gee
 7. If you want to clear the databases of their stored information, run `docker compose down --volumes` in your terminal 
 
 **Guide for Running Tests**
-1. Navigate to Project Code/src using cd commands
+This needs to be filled in
+1. Navigate to Tests/src using cd commands
 2. Ensure that there is no "node_modules" file. If there is, delete it
 3. Run "npm install" command in terminal
 4. Run "npm run test" command in terminal
-
 **Deployed Application**
 Due to issues pertaining to the CU deployment environment provided in class, the application is not deployed (as instructed by TA)
