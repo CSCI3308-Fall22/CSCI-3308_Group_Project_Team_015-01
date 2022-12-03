@@ -21,7 +21,7 @@ This application utilizes the joke APIs icanhazdadjoke, YOMOMMA, Blauge.xyz, Gee
   - YOMOMMA API
   - Blauge.xyz
   - Geek Joke API
-  - Bread Puns API
+  - Bread Puns API (purged by Heroku, no longer functions)
 - Testing Tool: Chai, Mocha
 - Deployment Environment: LocalHost and Class Environment
 - UI Tools: HTML, EJS
@@ -35,6 +35,7 @@ This application utilizes the joke APIs icanhazdadjoke, YOMOMMA, Blauge.xyz, Gee
    - The repository can be downloaded by clicking the green **Code** button and then pressing download zip
    - The repository can be cloned using the following command: `git clone https://github.com/CSCI3308-Fall22/CSCI-3308_Group_Project_Team_015-01.git`
 2. Navigate to the Project code directory using `cd` commands in your terminal
+3. Open the file docker-compose.yaml and ensure line 21 reads "- '3000:3000'" so the application can be deployed locally (the .yaml file may instead read "- ':3000'", which may cause crashing if deployed locally)
 3. Boot up Docker
 4. In terminal run `docker compose up`
 5. Navigate in a search engine to [this localhost page](http://localhost:3000/) (http://localhost:3000/)
