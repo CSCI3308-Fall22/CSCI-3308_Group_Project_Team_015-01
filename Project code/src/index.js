@@ -50,7 +50,7 @@ console.log('Server is listening on port 3000');
 // const server = app.listen(3000, function(){
 //   console.log('Server is listening on port 3000');
 // })
-module.exports = app;
+module.exports = { app, db };
 
 //Global Variables
 var joke_results = [];

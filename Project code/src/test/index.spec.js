@@ -65,7 +65,7 @@ describe('Register/Login/Logout',() => {
                 .send(User)
                 .end(function(err, res){
                     res.body.should.be.a("object");
-                    // res.body.should.equal("register.ejs");
+                    res.should.have.property("error");
                     done();
                 });
         });
@@ -81,7 +81,8 @@ describe('Register/Login/Logout',() => {
                 .send(user)
                 .end(function(err, res){
                     res.body.should.be.a("object");
-                    // expect(err).to.exist;
+                    res.should.have.property("error");
+                    // res.error.should.contain("at least 8 digits including one number, lowercase and uppercase letter, and a symbol");
                     done();
                 });
         });
@@ -97,7 +98,7 @@ describe('Register/Login/Logout',() => {
                 .send(user)
                 .end(function(err, res){
                     res.body.should.be.a("object");
-                    // expect(err).to.exist;
+                    res.should.have.property("error");
                     done();
                 });
         });
@@ -136,7 +137,7 @@ describe('Register/Login/Logout',() => {
                 .send(user)
             .end(function(err, res){
                 res.body.should.be.a("object");
-                // expect(err).to.exist;
+                res.should.have.property("error");
                 done();
             });
         });
@@ -153,7 +154,7 @@ describe('Register/Login/Logout',() => {
                 .send(user)
             .end(function(err, res){
                 res.body.should.be.a("object");
-                // expect(err).to.exist;
+                res.should.have.property("error");
                 done();
             });
         });
@@ -193,7 +194,8 @@ describe("Joke Generating", function(){
             .send(joke)
         .end(function(err, res){
             res.body.should.be.a("object");
-            // expect(err).to.exist;
+            res.should.have.property("error");
+            // res.error.should.include("")
             done();
         });
     });
@@ -204,7 +206,8 @@ describe("Joke Generating", function(){
         "yoMama":false,
         "french":true,
         "geek":false,
-        "bread":false
+        "bread":false,
+        "quantity": null
         }
         request(app)
             .post('/displayjokes')
@@ -219,11 +222,12 @@ describe("Joke Generating", function(){
 
     it('Removing filter resets jokes', (done) => {
         let joke = {
-        "dadJokes":false,
+        "dadJokes":true,
         "yoMama":false,
         "french":false,
         "geek":false,
-        "bread":false
+        "bread":false,
+        "quantity": 5
         }
         request(app)
             .post('/displayjokes')
@@ -241,7 +245,8 @@ describe("Joke Generating", function(){
         "yoMama":false,
         "french":false,
         "geek":false,
-        "bread":false
+        "bread":false,
+        "quantity": 5
         }
         request(app)
             .post('/displayjokes')
@@ -259,7 +264,8 @@ describe("Joke Generating", function(){
         "yoMama":false,
         "french":false,
         "geek":false,
-        "bread":false
+        "bread":true,
+        "quantity": 5
         }
         request(app)
             .post('/displayjokes')
@@ -278,8 +284,6 @@ describe("Joke Saving/Recall", function(){
      * Test Joke Saving and Recall
      */
     it('Saved jokes can be recalled', (done) => {
-        let joke = {
-        }
         request(app)
             .post('/saved/remove/${results[i].joke_id}')
             .type('form')
